@@ -34,7 +34,13 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (store.getters.isUserAuth || to.name === 'Login') {
+  if (!store.getters.isUserAuth && to.name === 'Login') {
+    return next()
+  } else if (store.getters.isUserAuth && to.name === 'Login') {
+    return next({
+      name: from.name
+    })
+  } else if (store.getters.isUserAuth && to.name !== 'Login') {
     return next()
   }
   next({

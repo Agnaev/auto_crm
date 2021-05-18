@@ -1,7 +1,7 @@
 import LocalStorageService from '@/services/LocalStorageService'
 
 const state = () => ({
-  userData: LocalStorageService.userData
+  userData: JSON.parse(LocalStorageService.userData ?? 'null')
 })
 
 export default state
