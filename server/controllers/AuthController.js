@@ -1,43 +1,18 @@
-import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 
 import { User } from '../models/UserModel.js'
-
-function hashPassword (password) {
-	return bcrypt.hash(password, 10)
-}
-
-function validatePassword (plainPassword, hashedPassword) {
-	return bcrypt.compare(plainPassword, hashedPassword)
-}
-
-function jwtSign (payload, config = {}) {
-	return jwt.sign(
-		payload,
-		process.env.JWT_SECRET,
-		{
-			expiresIn: process.env.JWT_LIFETIME,
-			...config
-		}
-	)
-}
-
-function jwtVerify (token) {
-	try {
-		return jwt.verify(
-			token,
-			process.env.JWT_SECRET,
-			{
-				algorithm: 'HS256'
-			})
-	} catch (e) {
-		return e.message
-	}
-}
+import { jwtRefreshSign, jwtSign, jwtVerify } from "@/helpers/jwt"
+import { hashPassword, validatePassword } from "@/helpers/bcrypt"
 
 export async function signup (req, res, next) {
 	try {
 		const { email, password } = req.body
+		const foundedUser = await User.findOne({ email })
+		if (foundedUser) {
+			return res.status(400).json({
+				message: `A user with the email ${email} already exists`
+			})
+		}
 		const hashedPassword = await hashPassword(password)
 		const newUser = new User({
 			email,
@@ -46,13 +21,7 @@ export async function signup (req, res, next) {
 		})
 
 		await newUser.save()
-		res.json({
-			user: {
-				role: newUser.role,
-				userId: newUser._id,
-				email: newUser.email
-			}
-		})
+		res.sendStatus(201)
 	} catch (e) {
 		next(e)
 	}
@@ -62,32 +31,25 @@ export async function login (req, res) {
 	try {
 		const { email, password } = req.body
 		const user = await User.findOne({ email })
-		console.log('email', email)
 		if (!user?.email) {
-			return res.status(401).json({
-				message: 'Email or password incorrect'
-			})
+			return invalid()
 		}
 		const validPassword = await validatePassword(password, user.password)
 		if (!validPassword) {
-			return res.status(401).json({
-				message: 'Email or password is incorrect'
-			})
+			return invalid()
 		}
 		const accessToken = jwtSign({
 			userId: user._id,
 			email: user.email
 		})
-		const refreshToken = jwtSign({
+		const refreshToken = jwtRefreshSign({
 			userId: user._id,
 			email: user.email
-		}, {
-			expiresIn: process.env.JWT_REFRESH_TOKEN_LIFETIME
 		})
 
 		await User.findByIdAndUpdate(user._id, { refreshToken })
 		res.status(200).json({
-			data: {
+			user: {
 				email: user.email,
 				role: user.role
 			},
@@ -95,6 +57,10 @@ export async function login (req, res) {
 			refreshToken
 		})
 	} catch (e) {
+		invalid()
+	}
+
+	function invalid () {
 		res.status(401).json({
 			message: 'Email or password is incorrect'
 		})
