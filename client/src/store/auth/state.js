@@ -1,5 +1,7 @@
+import LocalStorageService from '@/services/LocalStorageService'
+
 const state = () => ({
-  userData: null
+  userData: LocalStorageService.userData
 })
 
 export default state

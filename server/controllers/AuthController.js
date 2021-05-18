@@ -1,8 +1,6 @@
-import bcrypt from 'bcrypt'
-
 import { User } from '../models/UserModel.js'
-import { jwtRefreshSign, jwtSign, jwtVerify } from "@/helpers/jwt"
-import { hashPassword, validatePassword } from "@/helpers/bcrypt"
+import { jwtRefreshSign, jwtSign, jwtVerify } from "../helpers/jwt.js"
+import { hashPassword, validatePassword } from "../helpers/bcrypt.js"
 
 export async function signup (req, res, next) {
 	try {

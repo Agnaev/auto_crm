@@ -15,6 +15,14 @@ class LocalStorageService {
     return localStorage.getItem('refreshToken')
   }
 
+  get userData () {
+    return localStorage.getItem('userData')
+  }
+
+  set userData (value) {
+    return localStorage.setItem('userData', value)
+  }
+
   clear () {
     localStorage.clear()
   }
