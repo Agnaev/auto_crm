@@ -29,12 +29,12 @@
       </el-menu-item>
       <el-menu-item
         index="/orders"
-        v-if="permissions.employee || permissions.admin">
+        v-if="permissions.manager || permissions.admin">
         Заказы
       </el-menu-item>
       <el-menu-item
         index="/services"
-        v-if="permissions.mechanic || permissions.employee || permissions.admin"
+        v-if="permissions.mechanic || permissions.manager || permissions.admin"
       >
         Services
       </el-menu-item>
@@ -64,7 +64,7 @@ export default {
     const role = store.getters.getUserData.role
     const permissions = {
       mechanic: role === 'mechanic',
-      employee: role === 'employee',
+      manager: role === 'manager',
       admin: role === 'admin'
     }
     return {

@@ -4,7 +4,7 @@ export const ROLES = Object.freeze(
 		{
 			client: 'client',
 			mechanic: 'mechanic',
-			employee: 'employee',
+			manager: 'manager',
 			admin: 'admin'
 		}
 	)
@@ -16,7 +16,7 @@ export const ACCESS_LEVELS = Object.freeze(
 		{
 			client: 16,
 			mechanic: 8,
-			employee: 4,
+			manager: 4,
 			admin: 2
 		}
 	)
