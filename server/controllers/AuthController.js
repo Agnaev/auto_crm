@@ -21,7 +21,9 @@ export async function signup (req, res, next) {
 		await newUser.save()
 		res.sendStatus(201)
 	} catch (e) {
-		next(e)
+		res.status(400).json({
+			message: 'Something went wrong.' + e.message
+		})
 	}
 }
 
@@ -38,11 +40,11 @@ export async function login (req, res) {
 		}
 		const accessToken = jwtSign({
 			userId: user._id,
-			email: user.email
+			email: user.email,
+			role: user.role
 		})
 		const refreshToken = jwtRefreshSign({
-			userId: user._id,
-			email: user.email
+			userId: user._id
 		})
 
 		await User.findByIdAndUpdate(user._id, { refreshToken })
@@ -88,7 +90,8 @@ export async function refresh (req, res) {
 	}
 	const accessToken = jwtSign({
 		userId: foundedUser._id,
-		email: foundedUser.email
+		email: foundedUser.email,
+		role: foundedUser.role
 	})
 
 	res.status(200).json({

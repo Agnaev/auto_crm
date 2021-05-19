@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 import env from 'dotenv'
 import path from 'path'
 
-import { setRoutes } from "./routers/index.js"
+import { setRoutes } from './routers/index.js'
 
 env.config(path.join(process.cwd(), '.env'))
 
@@ -15,7 +15,8 @@ async function main () {
 		process.env.MONGO_CONNECTION_STRING,
 		{
 			useUnifiedTopology: true,
-			useNewUrlParser: true
+			useNewUrlParser: true,
+			useFindAndModify: false
 		}
 	)
 
