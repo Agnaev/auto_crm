@@ -22,7 +22,7 @@
         Интернет-магазин
       </el-menu-item>
       <el-menu-item
-        index="/about"
+        index="/users"
         v-if="permissions.admin"
       >
         Пользователи
@@ -85,6 +85,7 @@ export default {
   box-shadow: 0 0 31px rgba(0, 0, 0, 0.13);
   display: flex;
   align-items: center;
+  z-index: 1;
 
   &__logo {
     width: 320px;
