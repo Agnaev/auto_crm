@@ -21,7 +21,7 @@ export async function getUsersList (req, res) {
 	}
 }
 
-export function updateUser (req, res) {
+export async function updateUser (req, res) {
 	try {
 		const { _id, email, role, username } = req.body
 		if (!email && !role && !username) {
@@ -29,7 +29,7 @@ export function updateUser (req, res) {
 				message: 'Nothing to update'
 			})
 		}
-		User.findById(_id, (err, doc) => {
+		await User.findById(_id, (err, doc) => {
 			if (err) {
 				return res.status(404).json({
 					message: 'Cannot find user. ' + err.message
@@ -38,6 +38,9 @@ export function updateUser (req, res) {
 			doc.username = username
 			doc.role = role
 			doc.save()
+		})
+		res.status(200).json({
+			message: 'updated'
 		})
 	} catch (e) {
 		return res.status(404).json({
