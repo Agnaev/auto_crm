@@ -1,0 +1,34 @@
+Table Users {
+  _id int [pk, increment]
+  username string
+  email string
+  password string
+  role string
+}
+
+Table Services {
+  _id int [pk, increment]
+  name string
+  description string
+  price int
+  date date
+}
+
+Table Products {
+  _id int [pk, increment]
+  name string
+  description string
+  price int
+}
+
+Table UserServices {
+  _id int [pk, increment]
+  serviceId int [ref: - Services._id]
+  userId int [ref: - Users._id]
+}
+
+Table UserOrders {
+  _id int [pk, increment]
+  productId int [ref: - Products._id]
+  userId int [ref: - Users._id]
+}
