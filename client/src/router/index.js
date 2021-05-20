@@ -4,28 +4,14 @@ import Home from '@/views/Home.vue'
 import store from '@/store'
 
 const routes = [
-  {
-    path: '/',
-    name: 'MainLayout',
-    component: MainLayout,
-    children: [
-      {
-        path: '',
-        name: 'Home',
-        component: Home
-      },
-      {
-        path: '/about',
-        name: 'Abount',
-        component: () => import('../views/About.vue')
-      }
-    ]
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: () => import('../views/Login.vue')
-  }
+  new Route('/', 'MainLayout', MainLayout, [
+    new Route('', 'Home', Home),
+    new Route('/users', 'Users', () => import('@/views/Users.vue')),
+    new Route('/orders', 'OrdersPage', () => import('@/views/OrdersPage.vue')),
+    new Route('/store', 'Store', () => import('@/views/Store.vue')),
+    new Route('/services', 'Service', () => import('@/views/Services.vue'))
+  ]),
+  new Route('/login', 'Login', () => import('@/views/Login.vue'))
 ]
 
 const router = createRouter({
@@ -50,5 +36,12 @@ router.beforeEach((to, from, next) => {
     }
   })
 })
+
+function Route (path, name, component, children) {
+  this.path = path
+  this.name = name
+  this.component = component
+  this.children = children
+}
 
 export default router
