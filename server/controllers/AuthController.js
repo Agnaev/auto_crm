@@ -2,9 +2,9 @@ import { User } from '../models/UserModel.js'
 import { jwtRefreshSign, jwtSign, jwtVerify } from "../helpers/jwt.js"
 import { hashPassword, validatePassword } from "../helpers/bcrypt.js"
 
-export async function signup (req, res, next) {
+export async function signup (req, res) {
 	try {
-		const { email, password } = req.body
+		const { email, password, username } = req.body
 		const foundedUser = await User.findOne({ email })
 		if (foundedUser) {
 			return res.status(400).json({
@@ -15,7 +15,8 @@ export async function signup (req, res, next) {
 		const newUser = new User({
 			email,
 			password: hashedPassword,
-			role: 'basic'
+			role: 'client',
+			username
 		})
 
 		await newUser.save()

@@ -1,6 +1,6 @@
 import ActionTypes from './action-types'
 import MutationTypes from './mutation-types'
-import authService from '@/services/authService'
+import authService from '@/services/AuthService'
 import LocalStorageService from '@/services/LocalStorageService'
 import { deepClone } from '@/helpers/deepClone'
 

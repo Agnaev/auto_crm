@@ -1,4 +1,4 @@
-import AxiosClient from './axios-client'
+import AxiosClient from './AxiosClient.js'
 
 const baseURL = process.env.VUE_APP_API_HOST
 

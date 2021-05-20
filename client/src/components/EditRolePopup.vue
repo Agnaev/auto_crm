@@ -10,11 +10,11 @@
           disabled
         ></el-input>
       </el-form-item>
+      <el-form-item label="Эл. адрес">
+        <el-input v-model="formData.email" disabled></el-input>
+      </el-form-item>
       <el-form-item label="Имя пользователя">
         <el-input v-model="formData.username"></el-input>
-      </el-form-item>
-      <el-form-item label="Эл. адрес">
-        <el-input v-model="formData.email"></el-input>
       </el-form-item>
       <el-form-item label="Роль">
         <el-select
@@ -41,6 +41,8 @@
 
 <script>
 import { computed, reactive } from 'vue'
+import { useStore } from 'vuex'
+import ActionTypes from '@/store/users/action-types'
 
 export default {
   name: 'EditRolePopup',
@@ -56,6 +58,7 @@ export default {
   },
   emits: ['close'],
   setup (props, { emit }) {
+    const store = useStore()
     const dialogVisible = computed({
       get: () => props.visible,
       set: () => emit('close')
@@ -80,8 +83,10 @@ export default {
     ]
 
     function save () {
-      console.log(formData)
-      // TODO make save user data
+      store.dispatch(
+        ActionTypes.UPDATE_USER_INFO,
+        formData
+      )
       emit('close')
     }
 

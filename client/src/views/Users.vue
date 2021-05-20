@@ -25,10 +25,11 @@
         label="Действия"
       >
         <template #default="data">
-          <el-button
-            @click="changeUserRole(data.row)"
-          >
+          <el-button @click="changeUserRole(data.row)">
             Изменить
+          </el-button>
+          <el-button type="danger" @click="removeUser(data.row._id)" :disabled="data.row.role === 'admin'">
+            Удалить
           </el-button>
         </template>
       </el-table-column>
@@ -43,25 +44,18 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { computed, ref, onMounted } from 'vue'
+import { useStore } from 'vuex'
 import EditRolePopup from '@/components/EditRolePopup'
+import ActionTypes from '@/store/users/action-types'
 
 export default {
   components: {
     EditRolePopup
   },
   setup () {
-    const data = ref([{
-      _id: Math.random().toString(36).slice(-8),
-      username: 'Alan',
-      email: 'agnaev@email.ru',
-      role: 'admin'
-    }, {
-      _id: Math.random().toString(36).slice(-8),
-      username: 'Adam',
-      email: 'adam@email.ru',
-      role: 'admin'
-    }])
+    const store = useStore()
+    const data = computed(() => store.getters.getUsersList)
 
     const popupVisible = ref(false)
     const popupData = ref(null)
@@ -76,12 +70,29 @@ export default {
       popupData.value = null
     }
 
+    onMounted(() => {
+      store.dispatch(
+        ActionTypes.GET_USERS_LIST
+      )
+    })
+
+    function removeUser (_id) {
+      console.log(_id)
+      store.dispatch(
+        ActionTypes.REMOVE_USER,
+        {
+          _id
+        }
+      )
+    }
+
     return {
       data,
       popupVisible,
       changeUserRole,
       closePopup,
-      popupData
+      popupData,
+      removeUser
     }
   }
 }

@@ -33,7 +33,7 @@ class AxiosClient {
   handleRequest = config => {
     const accessToken = LocalStorageService.token
     if (accessToken) {
-      config.headers.Authorization = accessToken
+      config.headers.Authorization = 'Bearer ' + accessToken
     }
     return config
   }

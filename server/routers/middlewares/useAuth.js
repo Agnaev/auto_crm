@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken'
+import { jwtVerify } from '../../helpers/jwt.js'
 
 export async function useAuth (req, res, next) {
 	const accessToken = req.headers.authorization?.split(' ')?.[1]
@@ -6,9 +6,7 @@ export async function useAuth (req, res, next) {
 		return invalid()
 	}
 	try {
-		req.user = await jwt.verify(accessToken, process.env.JWT_SECRET, {
-			algorithm: 'HS256'
-		})
+		req.user = await jwtVerify(accessToken)
 		next()
 	} catch (e) {
 		invalid()

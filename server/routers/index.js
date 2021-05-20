@@ -3,6 +3,7 @@ import cors from 'cors'
 
 import AuthRouter from './AuthRouter.js'
 import testRouter from './testAuthProtection.js'
+import UsersRouter from './UsersRouter.js'
 import { checkUserInRole, useRoles } from './middlewares/useRoles.js'
 import { useAuth } from './middlewares/useAuth.js'
 import { ROLES } from '../helpers/ROLES.js'
@@ -12,5 +13,6 @@ export function setRoutes (app) {
 	app.use(bodyParser.urlencoded({ extended: false }))
 	app.use(cors())
 	app.use('/auth', AuthRouter)
+	app.use('/users', useAuth, useRoles, checkUserInRole('admin'), UsersRouter)
 	app.use('/test', useAuth, useRoles, checkUserInRole(ROLES.manager), testRouter)
 }
