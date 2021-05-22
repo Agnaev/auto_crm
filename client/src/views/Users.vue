@@ -28,9 +28,19 @@
           <el-button @click="changeUserRole(data.row)">
             Изменить
           </el-button>
-          <el-button type="danger" @click="removeUser(data.row._id)" :disabled="data.row.role === 'admin'">
-            Удалить
-          </el-button>
+          <el-popconfirm
+            title="Вы уверены что хотите удалить пользователя?"
+            @confirm="removeUser(data.row._id)"
+            confirmButtonType="danger"
+            cancelButtonText="Отмена"
+            confirmButtonText="Удалить"
+            icon="el-icon-info"
+            iconColor="red"
+          >
+            <template #reference>
+              <el-button :disabled="data.row.role === 'admin'">Удалить</el-button>
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -71,19 +81,11 @@ export default {
     }
 
     onMounted(() => {
-      store.dispatch(
-        ActionTypes.GET_USERS_LIST
-      )
+      store.dispatch(ActionTypes.GET_USERS_LIST)
     })
 
     function removeUser (_id) {
-      console.log(_id)
-      store.dispatch(
-        ActionTypes.REMOVE_USER,
-        {
-          _id
-        }
-      )
+      store.dispatch(ActionTypes.REMOVE_USER, { _id })
     }
 
     return {
