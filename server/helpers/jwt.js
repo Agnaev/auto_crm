@@ -14,7 +14,7 @@ export function jwtSign (payload, config = {}) {
 export function jwtRefreshSign (payload, config = {}) {
   return jwt.sign(
     payload,
-    process.env.JWT_REFRESH_TOKEN_LIFETIME,
+    process.env.JWT_REFRESH_SECRET,
     {
       expiresIn: process.env.JWT_REFRESH_TOKEN_LIFETIME,
       ...config
@@ -27,10 +27,21 @@ export function jwtVerify (token) {
     return jwt.verify(
       token,
       process.env.JWT_SECRET,
-      {
-        algorithm: 'HS256'
-      })
-  } catch (e) {
-    return e.message
+      { algorithm: 'HS256' }
+    )
+  } catch {
+    return  null
+  }
+}
+
+export function jwtRefreshVerify (refreshToken) {
+  try {
+    return jwt.verify(
+      refreshToken,
+      process.env.JWT_REFRESH_SECRET,
+      { algorithm: 'HS256' }
+    )
+  } catch {
+    return null
   }
 }

@@ -1,4 +1,4 @@
-import { ACCESS_LEVELS } from '../../helpers/ROLES.js'
+import { getAccessLevelByRole } from '../../helpers/ROLES.js'
 
 export function useRoles (req, res, next) {
 	if (!req.user) {
@@ -11,10 +11,10 @@ export function useRoles (req, res, next) {
 }
 
 export function checkUserInRole (role) {
-	const requiredAccess = ACCESS_LEVELS[role]
+	const requiredAccess = getAccessLevelByRole(role)
 	return (req, res, next) => {
 		const userRole = req.role ?? req.user?.role
-		const userAccessLevel = ACCESS_LEVELS[userRole]
+		const userAccessLevel = getAccessLevelByRole(userRole)
 		if (role && requiredAccess >= userAccessLevel) {
 			return next()
 		}

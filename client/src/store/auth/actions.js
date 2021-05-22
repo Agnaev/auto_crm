@@ -16,6 +16,7 @@ const actions = {
     LocalStorageService.userData = JSON.stringify(authData.user)
   },
   [ActionTypes.LOGOUT]: async ({ commit }) => {
+    await authService.logout()
     LocalStorageService.clear()
     commit(MutationTypes.SET_USER_DATA, null)
   },

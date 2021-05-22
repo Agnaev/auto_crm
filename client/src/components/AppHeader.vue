@@ -33,23 +33,30 @@
       <el-menu-item index="/services">
         Услуги
       </el-menu-item>
+      <el-menu-item>
+        <el-button @click="logout">
+          Выход
+        </el-button>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>
 
 <script>
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import ActionTypes from '@/store/auth/action-types'
 
 export default {
   name: 'AppHeader',
   setup () {
     const activeIndex = ref('/')
     const store = useStore()
+    const route = useRoute()
+    const router = useRouter()
 
     onMounted(() => {
-      const route = useRoute()
       const matchedPath = route.path.match(/^\/[a-zA-Z-]*/)
       activeIndex.value = matchedPath?.length
         ? matchedPath[0]
@@ -62,9 +69,20 @@ export default {
       manager: role === 'manager',
       admin: role === 'admin'
     }
+
+    async function logout () {
+      await store.dispatch(
+        ActionTypes.LOGOUT
+      )
+      await router.push({
+        name: 'Login'
+      })
+    }
+
     return {
       activeIndex,
-      permissions
+      permissions,
+      logout
     }
   }
 }
@@ -91,5 +109,8 @@ export default {
   &__links {
     width: calc(100% - 320px);
   }
+}
+.el-menu-item:last-child {
+  margin-left: auto;
 }
 </style>

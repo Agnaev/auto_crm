@@ -20,6 +20,10 @@ class AuthService extends AxiosClient {
       password
     })
   }
+
+  logout () {
+    return this.instance.post('/auth/logout')
+  }
 }
 
 export default new AuthService(baseURL)
