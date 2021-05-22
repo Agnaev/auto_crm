@@ -1,36 +1,47 @@
 <template>
-  <div class="container">
-    <store-card
-      v-for="item in data"
-      :key="item"
-      :header="item.header"
-      :description="item.description"
-      :id="item.header"
-      @add-to-cart="addItemHandler(item)"
-    ></store-card>
+  <div class="products-list">
+    <el-tabs type="card" v-if="role === 'admin' || role === 'manager'">
+      <el-tab-pane label="Админ">
+        <store-admin-view :data="data" />
+      </el-tab-pane>
+      <el-tab-pane label="Клиент">
+        <store-client-view :data="data"/>
+      </el-tab-pane>
+    </el-tabs>
+    <store-client-view
+      :data="data"
+      v-else
+    />
   </div>
 </template>
 
 <script>
-import StoreCard from '../components/store/card'
+import { computed, onMounted } from 'vue'
+import { useStore } from 'vuex'
+import StoreAdminView from '@/components/store/StoreAdminView'
+import StoreClientView from '@/components/store/StoreClientView'
+import ActionTypes from '@/store/store/action-types'
+
 export default {
   name: 'Store',
   components: {
-    StoreCard
+    StoreAdminView,
+    StoreClientView
   },
   setup () {
-    const data = [
-      {
-        header: 'header',
-        description: 'description'
-      }
-    ]
-    function addItemHandler (item) {
-      console.log(item)
-    }
+    const store = useStore()
+    const data = computed(() => store.getters.getProductsList)
+    const role = computed(() => store.getters.getUserData?.role ?? '')
+
+    onMounted(() => {
+      store.dispatch(
+        ActionTypes.FETCH_PRODUCTS_LIST
+      )
+    })
+
     return {
       data,
-      addItemHandler
+      role
     }
   }
 }
@@ -44,5 +55,8 @@ export default {
   grid-column-gap: 20px;
 
   margin: 20px 20px;
+}
+.products-list {
+  margin: 20px;
 }
 </style>

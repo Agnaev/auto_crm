@@ -11,10 +11,10 @@ export function useRoles (req, res, next) {
 }
 
 export function checkUserInRole (role) {
+	const requiredAccess = ACCESS_LEVELS[role]
 	return (req, res, next) => {
 		const userRole = req.role ?? req.user?.role
 		const userAccessLevel = ACCESS_LEVELS[userRole]
-		const requiredAccess = ACCESS_LEVELS[role]
 		if (role && requiredAccess >= userAccessLevel) {
 			return next()
 		}

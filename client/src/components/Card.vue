@@ -1,5 +1,5 @@
 <template>
-  <el-card class="store-card">
+  <el-card :class="$props.class">
     <template #header>
       <div class="store-card__header">
         <span>{{ $props.header }}</span>
@@ -11,7 +11,7 @@
     </span>
     </div>
     <div class="store-card__btn">
-      <el-button @click="$emit('add-to-cart')">В корзину</el-button>
+      <el-button @click="$emit('add-to-cart')">{{ $props.btnText }}</el-button>
     </div>
   </el-card>
 </template>
@@ -31,6 +31,16 @@ export default {
     id: {
       type: [String, Number],
       required: true
+    },
+    class: {
+      type: String,
+      required: false,
+      default: ''
+    },
+    btnText: {
+      type: String,
+      required: false,
+      default: 'В корзину'
     }
   },
   emits: ['add-to-cart']

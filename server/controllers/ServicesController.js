@@ -52,7 +52,7 @@ export async function deleteService (req, res) {
 				message: 'Could not find service by id'
 			})
 		}
-		service.delete()
+		await service.delete()
 		res.status(200).json({
 			message: 'Deleted'
 		})
@@ -72,18 +72,11 @@ export async function updateService (req, res) {
 				message: 'Nothing to update'
 			})
 		}
-		const service = await Service.findById(_id, (err, doc) => {
-			if (err) {
-				return res.status(400).json({
-					message: 'Error while updating service',
-					error: err.message
-				})
-			}
-			doc.name = name
-			doc.description = description
-			doc.price = price
-			doc.save()
-		})
+		const service = await Service.findById(_id, { __v: 0 })
+		service.name = name
+		service.description = description
+		service.price = price
+		await service.save()
 		res.status(200).json(service)
 	} catch (e) {
 		res.status(400).json({

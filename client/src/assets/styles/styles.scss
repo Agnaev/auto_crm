@@ -3,3 +3,9 @@
   margin: 0;
   box-sizing: border-box;
 }
+
+.client-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 10px;
+}

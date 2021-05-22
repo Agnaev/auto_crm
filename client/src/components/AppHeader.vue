@@ -27,16 +27,11 @@
       >
         Пользователи
       </el-menu-item>
-      <el-menu-item
-        index="/orders"
-        v-if="permissions.manager || permissions.admin">
-        Заказы
+      <el-menu-item index="/orders">
+        {{ permissions.admin || permissions.manager ? 'Заказы' : 'Корзина' }}
       </el-menu-item>
-      <el-menu-item
-        index="/services"
-        v-if="permissions.mechanic || permissions.manager || permissions.admin"
-      >
-        Services
+      <el-menu-item index="/services">
+        Услуги
       </el-menu-item>
     </el-menu>
   </div>
