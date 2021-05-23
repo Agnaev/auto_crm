@@ -16,9 +16,12 @@ const actions = {
     LocalStorageService.userData = JSON.stringify(authData.user)
   },
   [ActionTypes.LOGOUT]: async ({ commit }) => {
-    await authService.logout()
-    LocalStorageService.clear()
-    commit(MutationTypes.SET_USER_DATA, null)
+    try {
+      await authService.logout()
+    } finally {
+      LocalStorageService.clear()
+      commit(MutationTypes.SET_USER_DATA, null)
+    }
   },
   [ActionTypes.SIGNUP]: async (_, { email, password }) => {
     return await authService.signup({
