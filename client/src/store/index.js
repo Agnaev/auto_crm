@@ -3,6 +3,7 @@ import auth from './auth/index.js'
 import users from './users/index.js'
 import services from './services'
 import store from './store'
+import shoppingCart from './shopping-cart'
 
 const debug = process.env.NODE_ENV !== 'production'
 const plugins = debug ? [createLogger({})] : []
@@ -14,6 +15,7 @@ export default window.store = createStore({
     auth,
     users,
     services,
-    store
+    store,
+    shoppingCart
   }
 })

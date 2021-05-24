@@ -11,7 +11,10 @@
     </span>
     </div>
     <div class="store-card__btn">
-      <el-button @click="$emit('add-to-cart')">{{ $props.btnText }}</el-button>
+      <el-badge v-if="$props.inShoppingCart" value="В корзине">
+        <el-button type="success" @click="$emit('add-to-cart')">{{ $props.btnText }}</el-button>
+      </el-badge>
+      <el-button v-else type="success" @click="$emit('add-to-cart')">{{ $props.btnText }}</el-button>
     </div>
   </el-card>
 </template>
@@ -41,6 +44,11 @@ export default {
       type: String,
       required: false,
       default: 'В корзину'
+    },
+    inShoppingCart: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   emits: ['add-to-cart']

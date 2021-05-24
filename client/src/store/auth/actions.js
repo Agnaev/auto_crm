@@ -18,13 +18,15 @@ const actions = {
   [ActionTypes.LOGOUT]: async ({ commit }) => {
     try {
       await authService.logout()
+    } catch {
+      window.location.reload()
     } finally {
       LocalStorageService.clear()
       commit(MutationTypes.SET_USER_DATA, null)
     }
   },
-  [ActionTypes.SIGNUP]: async (_, { email, password }) => {
-    return await authService.signup({
+  [ActionTypes.SIGNUP]: (_, { email, password }) => {
+    return authService.signup({
       email,
       password
     })

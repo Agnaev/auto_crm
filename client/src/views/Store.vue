@@ -2,14 +2,13 @@
   <div class="products-list">
     <el-tabs type="card" v-if="role === 'admin' || role === 'manager'">
       <el-tab-pane label="Админ">
-        <store-admin-view :data="data" />
+        <store-admin-view />
       </el-tab-pane>
       <el-tab-pane label="Клиент">
-        <store-client-view :data="data"/>
+        <store-client-view />
       </el-tab-pane>
     </el-tabs>
     <store-client-view
-      :data="data"
       v-else
     />
   </div>
@@ -30,7 +29,6 @@ export default {
   },
   setup () {
     const store = useStore()
-    const data = computed(() => store.getters.getProductsList)
     const role = computed(() => store.getters.getUserData?.role ?? '')
 
     onMounted(() => {
@@ -40,7 +38,6 @@ export default {
     })
 
     return {
-      data,
       role
     }
   }

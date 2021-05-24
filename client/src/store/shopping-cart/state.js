@@ -1,6 +1,6 @@
 const state = () => ({
-  productsList: [],
-  indexedProductsList: []
+  shoppingCart: [],
+  indexedShoppingCart: []
 })
 
 export default state

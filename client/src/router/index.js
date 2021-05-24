@@ -7,7 +7,7 @@ const routes = [
   new Route('/', 'MainLayout', MainLayout, [
     new Route('', 'Home', Home),
     new Route('/users', 'Users', () => import('@/views/Users.vue')),
-    new Route('/orders', 'OrdersPage', () => import('@/views/OrdersPage.vue')),
+    new Route('/shopping-cart', 'ShoppingCart', () => import('@/views/ShoppingCart.vue')),
     new Route('/store', 'Store', () => import('@/views/Store.vue')),
     new Route('/services', 'Service', () => import('@/views/Services.vue'))
   ]),
@@ -20,13 +20,19 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (!store.getters.isUserAuth && to.name === 'Login') {
+  const isAuth = store.getters.isUserAuth
+  const { role } = store.getters.getUserData ?? {}
+  if (!isAuth && to.name === 'Login') {
     return next()
-  } else if (store.getters.isUserAuth && to.name === 'Login') {
+  } else if (isAuth && to.name === 'Login') {
     return next({
       name: from.name
     })
-  } else if (store.getters.isUserAuth && to.name !== 'Login') {
+  } else if (isAuth && role !== 'admin' && to.name === 'Users') {
+    return next({
+      name: 'Home'
+    })
+  } else if (isAuth && to.name !== 'Login') {
     return next()
   }
   next({

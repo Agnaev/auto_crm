@@ -7,6 +7,9 @@ export async function useAuth (req, res, next) {
 	}
 	try {
 		req.user = await jwtVerify(accessToken)
+		if (!req.user) {
+			return invalid()
+		}
 		next()
 	} catch (e) {
 		invalid()

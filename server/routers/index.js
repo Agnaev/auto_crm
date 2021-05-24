@@ -6,6 +6,7 @@ import testRouter from './testAuthProtection.js'
 import UsersRouter from './UsersRouter.js'
 import ServicesRouter from './ServicesRouter.js'
 import StoreRouter from './StoreRouter.js'
+import ShoppingCartRouter from './ClientShoppingRouter.js'
 
 export function setRoutes (app) {
 	app.use(bodyParser.json())
@@ -16,5 +17,6 @@ export function setRoutes (app) {
 	app.use('/test', testRouter)
 	app.use('/services', ServicesRouter)
 	app.use('/store', StoreRouter)
+	app.use('/shopping-cart', ShoppingCartRouter)
 	app.use((req, res) => res.sendStatus(404))
 }

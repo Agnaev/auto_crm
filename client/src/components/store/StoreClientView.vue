@@ -7,31 +7,47 @@
       :description="item.description"
       :id="item._id"
       class="store-card"
+      :in-shopping-cart="!!indexedShoppingCart[item._id]"
       @add-to-cart="addItemHandler(item)"
     ></store-card>
   </div>
 </template>
 
 <script>
+import { computed, onMounted } from 'vue'
+import { useStore } from 'vuex'
+import ActionTypes from '@/store/shopping-cart/action-types'
 import StoreCard from '@/components/Card'
+
 export default {
   name: 'StoreClientView',
-  props: {
-    data: {
-      type: Array,
-      required: true
-    }
-  },
   components: {
     StoreCard
   },
   setup () {
+    const store = useStore()
+    const indexedShoppingCart = computed(() => store.getters.getIndexedShoppingCart)
+    const data = computed(() => store.getters.getProductsList)
+
+    onMounted(
+      () => {
+        store.dispatch(ActionTypes.FETCH_SHOPPING_CART)
+      }
+    )
+
     function addItemHandler (item) {
-      console.log('add item handler', item)
+      store.dispatch(
+        ActionTypes.ADD_PRODUCT_TO_SHOPPING_CART,
+        {
+          productId: item._id
+        }
+      )
     }
 
     return {
-      addItemHandler
+      addItemHandler,
+      indexedShoppingCart,
+      data
     }
   }
 }

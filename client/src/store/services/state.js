@@ -1,5 +1,6 @@
 const state = () => ({
-  servicesList: []
+  servicesList: [],
+  indexedServicesList: []
 })
 
 export default state

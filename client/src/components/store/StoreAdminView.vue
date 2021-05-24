@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import ActionTypes from '@/store/store/action-types'
 import EditStorePopup from './EditStorePopup'
@@ -46,14 +46,9 @@ export default {
   components: {
     EditStorePopup
   },
-  props: {
-    data: {
-      type: Array,
-      required: true
-    }
-  },
   setup () {
     const store = useStore()
+    const data = computed(() => store.getters.getProductsList)
     const popupVisible = ref(false)
     const popupData = ref(null)
 
@@ -81,7 +76,8 @@ export default {
       removeHandle,
       popupData,
       popupVisible,
-      editHandle
+      editHandle,
+      data
     }
   }
 }

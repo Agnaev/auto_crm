@@ -8,33 +8,56 @@
       :id="item._id"
       class="services-list__item"
       btnText="Записаться"
-      @add-item-to-cart="addItemToCart(item)"
+      :in-shopping-cart="!!indexedShoppingCart[item._id]"
+      @add-to-cart="addItemToCart(item)"
     ></store-card>
+    <make-an-appointment-dialog
+      :visible="visible"
+      @close="visible = false"
+    ></make-an-appointment-dialog>
   </div>
 </template>
 
 <script>
-import {} from 'vue'
-import {} from 'vuex'
+import { computed, ref, onMounted } from 'vue'
+import { useStore } from 'vuex'
+import ActionTypes from '@/store/shopping-cart/action-types'
 import StoreCard from '@/components/Card'
+import MakeAnAppointmentDialog from './MakeAnAppointment'
+
 export default {
   name: 'ClientView',
   components: {
-    StoreCard
-  },
-  props: {
-    data: {
-      type: Array,
-      required: true
-    }
+    StoreCard,
+    MakeAnAppointmentDialog
   },
   setup () {
+    const store = useStore()
+    const data = computed(() => store.getters.getServicesList)
+    const indexedShoppingCart = computed(() => store.getters.getIndexedShoppingCart)
+    const visible = ref(false)
+
     function addItemToCart (item) {
-      console.log('add service to cart', item)
+      // store.dispatch(
+      //   ActionTypes.ADD_PRODUCT_TO_SHOPPING_CART, {
+      //     productId: item._id
+      //   }
+      // )
+      visible.value = true
+      // TODO Сделать запись на обслуживание
     }
 
+    onMounted(
+      () => {
+        store.dispatch(ActionTypes.FETCH_SHOPPING_CART)
+      }
+    )
+
     return {
-      addItemToCart
+      addItemToCart,
+      data,
+      indexedShoppingCart,
+      visible
     }
   }
 }
