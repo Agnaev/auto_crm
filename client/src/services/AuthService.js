@@ -14,10 +14,12 @@ class AuthService extends AxiosClient {
     return this.instance.post('/auth/refresh', { refresh })
   }
 
-  signup ({ email, password }) {
+  signup ({ email, password, username, carModel }) {
     return this.instance.post('/auth/signup', {
       email,
-      password
+      password,
+      username,
+      carModel
     })
   }
 

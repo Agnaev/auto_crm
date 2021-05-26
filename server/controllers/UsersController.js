@@ -1,4 +1,5 @@
 import { User } from '../models/UserModel.js'
+import { EmployeeModel } from '../models/EmployeeModel.js'
 
 export async function getUsersList (req, res) {
 	try	{
@@ -23,12 +24,37 @@ export async function getUsersList (req, res) {
 
 export async function updateUser (req, res) {
 	try {
-		const { _id, email, role, username } = req.body
+		const { _id, email, role, username, salary } = req.body
 		if (!email && !role && !username) {
 			return res.status(404).json({
 				message: 'Nothing to update'
 			})
 		}
+		const user = await User.findById(_id)
+		if (!user) {
+			return res.status(404).json({
+				message: 'Cannot find user.'
+			})
+		}
+
+		if (user.role !== 'client' && role === 'client') {
+			// remove from employees table if exist
+			const employee = await EmployeeModel.find({
+				clientId: user._id
+			})
+			await employee.delete()
+			await employee.save()
+		} else {
+			// add to employees table with role
+			const employee = new EmployeeModel({
+				clientId: user._id,
+				salary: salary || 0
+			})
+			await employee.save()
+		}
+
+		user.username = username
+		user.role = role
 		await User.findById(_id, (err, doc) => {
 			if (err) {
 				return res.status(404).json({
@@ -36,7 +62,7 @@ export async function updateUser (req, res) {
 				})
 			}
 			doc.username = username
-			doc.role = role
+			doc.role = role.toLowerCase()
 			doc.save()
 		})
 		res.status(200).json({
@@ -44,7 +70,7 @@ export async function updateUser (req, res) {
 		})
 	} catch (e) {
 		return res.status(404).json({
-			message: 'Error while updating user info'
+			message: 'Error while updating user info. ' + e.message
 		})
 	}
 }

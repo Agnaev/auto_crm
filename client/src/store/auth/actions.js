@@ -25,10 +25,12 @@ const actions = {
       commit(MutationTypes.SET_USER_DATA, null)
     }
   },
-  [ActionTypes.SIGNUP]: (_, { email, password }) => {
+  [ActionTypes.SIGNUP]: (_, { email, password, username, carModel }) => {
     return authService.signup({
       email,
-      password
+      password,
+      username,
+      carModel
     })
   }
 }

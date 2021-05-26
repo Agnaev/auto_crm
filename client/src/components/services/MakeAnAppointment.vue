@@ -2,7 +2,13 @@
   <el-dialog
     v-model="popupVisible"
   >
-    <el-calendar />
+    <el-calendar >
+      <template #dateCell="data">
+        <p :class="data.data.isSelected ? 'is-selected' : ''">
+          {{ log(data.data) || data.data.day }} {{ data.data.isSelected ? '✔️' : '' }}
+        </p>
+      </template>
+    </el-calendar>
   </el-dialog>
 </template>
 
@@ -23,8 +29,11 @@ export default {
       set: () => emit('close')
     })
 
+    const log = console.log
+
     return {
-      popupVisible
+      popupVisible,
+      log
     }
   }
 }

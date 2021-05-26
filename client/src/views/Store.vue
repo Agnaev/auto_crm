@@ -8,9 +8,7 @@
         <store-client-view />
       </el-tab-pane>
     </el-tabs>
-    <store-client-view
-      v-else
-    />
+    <store-client-view v-else />
   </div>
 </template>
 

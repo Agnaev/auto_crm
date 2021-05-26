@@ -30,7 +30,7 @@
       <el-menu-item index="/orders" v-if="permissions.admin || permissions.manager || permissions.mechanic">
         Заказы
       </el-menu-item>
-      <el-menu-item v-else index="/shopping-cart">
+      <el-menu-item index="/shopping-cart">
         Корзина
       </el-menu-item>
       <el-menu-item index="/services">

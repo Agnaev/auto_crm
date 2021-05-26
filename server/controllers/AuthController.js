@@ -15,7 +15,7 @@ export async function signup (req, res) {
 		const foundedUser = await User.findOne({ email })
 		if (foundedUser) {
 			return res.status(400).json({
-				message: `A user with the email ${email} already exists`
+				message: `Пользователь с адресом эл. почты ${email} уже существует`
 			})
 		}
 		const hashedPassword = await hashPassword(password)
@@ -70,7 +70,7 @@ export async function login (req, res) {
 
 	function invalid () {
 		res.status(401).json({
-			message: 'Email or password is incorrect'
+			message: 'Адрес эл. почты или пароль введены неверно.'
 		})
 	}
 }

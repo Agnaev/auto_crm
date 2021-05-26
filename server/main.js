@@ -3,12 +3,34 @@ import mongoose from 'mongoose'
 import env from 'dotenv'
 import path from 'path'
 
-import { setRoutes } from './routers/index.js'
+import router from './routers/index.js'
 
 env.config(path.join(process.cwd(), '.env'))
 
 const app = express()
-setRoutes(app)
+app.use('/api', router)
+
+if (process.env.NODE_ENV === 'production') {
+	const clientsFilesLocation = path.join(
+		process.cwd(),
+		'..',
+		'client',
+		'dist'
+	)
+	router.use(
+		express.static(
+			clientsFilesLocation
+		)
+	)
+	router.get('/', (req, res) => {
+		res.sendFile(
+			path.join(
+				clientsFilesLocation,
+				'index.html'
+			)
+		)
+	})
+}
 
 async function main () {
 	await mongoose.connect(

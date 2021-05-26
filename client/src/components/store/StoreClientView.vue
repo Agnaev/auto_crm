@@ -7,7 +7,7 @@
       :description="item.description"
       :id="item._id"
       class="store-card"
-      :in-shopping-cart="!!indexedShoppingCart[item._id]"
+      :in-shopping-cart="!!indexedShoppingCart?.[item._id]"
       @add-to-cart="addItemHandler(item)"
     ></store-card>
   </div>

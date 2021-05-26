@@ -4,13 +4,13 @@
       border
       :data="productsList"
     >
-      <el-table-column prop="_id" label="Идентификатор" >
-        <template #default="scope">
-          {{ scope.row._id }} <el-tag :type="scope.row.type === 'service' ? 'warning' : 'info'">
-          {{ scope.row.type === 'service' ? 'Услуга' : 'Товар' }}
-        </el-tag>
-        </template>
-      </el-table-column>
+<!--      <el-table-column prop="_id" label="Идентификатор" >-->
+<!--        <template #default="scope">-->
+<!--          {{ scope.row._id }} <el-tag :type="scope.row.type === 'service' ? 'warning' : 'info'">-->
+<!--          {{ scope.row.type === 'service' ? 'Услуга' : 'Товар' }}-->
+<!--        </el-tag>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
       <el-table-column label="Название">
         <template #default="scope">
           <span v-if="scope.row.type === 'product'">

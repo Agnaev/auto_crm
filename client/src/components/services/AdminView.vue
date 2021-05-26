@@ -23,7 +23,11 @@
     <el-table-column>
       <template #default="scope">
         <el-button @click="editHandle(scope.row)">Изменить</el-button>
-        <el-button type="danger" @click="removeHandle(scope.row._id)">Удалить</el-button>
+        <el-popconfirm @confirm="removeHandle(scope.row._id)">
+          <template #reference>
+            <el-button type="danger">Удалить</el-button>
+          </template>
+        </el-popconfirm>
       </template>
     </el-table-column>
   </el-table>
