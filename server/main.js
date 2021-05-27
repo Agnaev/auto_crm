@@ -4,6 +4,7 @@ import env from 'dotenv'
 import path from 'path'
 
 import router from './routers/index.js'
+import { createAdminIfNotExist } from './helpers/createAdminIfNotExist.js'
 
 env.config(path.join(process.cwd(), '.env'))
 
@@ -41,6 +42,8 @@ async function main () {
 			useFindAndModify: false
 		}
 	)
+
+	await createAdminIfNotExist()
 
 	const port = process.env.APP_PORT || 4000
 	const host = process.env.APP_HOST || 'localhost'
