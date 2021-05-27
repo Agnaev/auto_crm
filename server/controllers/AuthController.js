@@ -11,7 +11,8 @@ import {
 
 export async function signup (req, res) {
 	try {
-		const { email, password, username } = req.body
+		let { email, password, username } = req.body
+		email = email.toLowerCase()
 		const foundedUser = await User.findOne({ email })
 		if (foundedUser) {
 			return res.status(400).json({
@@ -37,7 +38,8 @@ export async function signup (req, res) {
 
 export async function login (req, res) {
 	try {
-		const { email, password } = req.body
+		let { email, password } = req.body
+		email = email.toLowerCase()
 		const user = await User.findOne({ email })
 		if (!user?.email) {
 			return invalid()
@@ -89,14 +91,14 @@ export async function refresh (req, res) {
 	try {
 		const decoded = await jwtRefreshVerify(refreshToken)
 		if (!decoded) {
-			return invalid(402)
+			return invalid(400)
 		}
 		const foundedUser = await User.findById(decoded.userId)
 		if (!foundedUser) {
-			return invalid(404)
+			return invalid(400)
 		}
 		if (foundedUser.refreshToken !== refreshToken) {
-			return invalid(403)
+			return invalid(400)
 		}
 		const accessToken = jwtSign({
 			userId: foundedUser._id,
@@ -109,7 +111,7 @@ export async function refresh (req, res) {
 			accessToken
 		})
 	} catch (e) {
-		invalid(405)
+		invalid(400)
 	}
 }
 
