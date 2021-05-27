@@ -1,5 +1,6 @@
 import { User } from '../models/UserModel.js'
 import { EmployeeModel } from '../models/EmployeeModel.js'
+import { ROLES } from '../helpers/ROLES.js'
 
 export async function getUsersList (req, res) {
 	try	{
@@ -87,6 +88,11 @@ export async function deleteUser (req, res) {
 		if (!user) {
 			return res.status(404).json({
 				message: 'User not found'
+			})
+		}
+		if (user.role === ROLES.admin) {
+			return res.status(400).json({
+				message: 'You cannot remove the admin'
 			})
 		}
 		await user.delete()
