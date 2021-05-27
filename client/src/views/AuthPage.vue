@@ -28,24 +28,23 @@ export default {
 
 <style scoped lang="scss">
 .auth-page {
-  height: 50%;
+  height: 100vh;
   &__wrapper {
-    display: flex;
     align-items: center;
     justify-content: center;
+    display: flex;
     flex-direction: column;
-
-    border: 2px solid #404040;
     border-radius: 10px;
-
+    height: inherit;
     width: 100%;
     max-width: 610px;
-
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin: -300px -300px;
-    padding: 20px;
+    margin: 0 auto;
+    .el-tabs {
+      padding: 25px 40px;
+      border: 2px solid #8cb91f;
+      border-radius: 12px;
+      margin: 0 auto;
+    }
   }
 }
 
