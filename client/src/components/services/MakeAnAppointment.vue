@@ -2,18 +2,49 @@
   <el-dialog
     v-model="popupVisible"
   >
-    <el-calendar >
-      <template #dateCell="data">
-        <p :class="data.data.isSelected ? 'is-selected' : ''">
-          {{ log(data.data) || data.data.day }} {{ data.data.isSelected ? '✔️' : '' }}
-        </p>
-      </template>
-    </el-calendar>
+    <div class="steps">
+      <el-steps :active="activeStep" finish-status="success" align-center>
+        <el-step title="Выбор мастера">
+          select master
+        </el-step>
+        <el-step title="Выбор даты">
+          select date by master
+        </el-step>
+        <el-step title="Выбор времени">
+          select time by date
+        </el-step>
+      </el-steps>
+    </div>
+    <div class="select-master" v-if="activeStep === 0">
+      <el-select>
+        <el-option>
+          master
+        </el-option>
+      </el-select>
+    </div>
+    <div class="select-date" v-else-if="activeStep === 1">
+      <el-calendar
+        :range="[new Date(), new Date(2021, 6, 24)]"
+      >
+        <template #dateCell="data">
+          <p :class="data.data.isSelected ? 'is-selected' : ''">
+            {{ log(data.data) || formatDate(data.data.day) }} {{ data.data.isSelected ? '✔️' : '' }}
+          </p>
+        </template>
+      </el-calendar>
+    </div>
+    <div class="select-time" v-else-if="activeStep === 2">
+      <el-time-select></el-time-select>
+    </div>
+    <div class="entries-created" v-else>
+      Вы успешно записались на обслуживание
+    </div>
+    <el-button @click="nextStep"></el-button>
   </el-dialog>
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 export default {
   name: 'MakeAnAppointmentDialog',
@@ -28,12 +59,36 @@ export default {
       get: () => props.visible,
       set: () => emit('close')
     })
+    const activeStep = ref(0)
 
-    const log = console.log
+    function nextStep () {
+      if (activeStep.value > 2) {
+        activeStep.value = 0
+        emit('close')
+      } else {
+        activeStep.value++
+      }
+    }
+
+    const minDate = new Date()
+    const maxDate = new Date()
+    maxDate.setMonth(minDate.getMonth() + 1)
+    const range = [minDate, maxDate]
+
+    function formatDate (date) {
+      return new Date(date).toLocaleDateString('ru', {
+        month: '2-digit',
+        day: '2-digit'
+      })
+    }
 
     return {
       popupVisible,
-      log
+      activeStep,
+      nextStep,
+      formatDate,
+      range,
+      log: console.log
     }
   }
 }

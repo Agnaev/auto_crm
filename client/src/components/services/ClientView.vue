@@ -8,7 +8,7 @@
       :id="item._id"
       class="services-list__item"
       btnText="Записаться"
-      :in-shopping-cart="!!indexedShoppingCart[item._id]"
+      :in-shopping-cart="!!indexedShoppingCart?.[item._id]"
       @add-to-cart="addItemToCart(item)"
     ></store-card>
     <make-an-appointment-dialog
