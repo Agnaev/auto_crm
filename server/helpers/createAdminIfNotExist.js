@@ -1,6 +1,7 @@
 import { hashPassword } from './bcrypt.js'
 import { ROLES } from './ROLES.js'
 import { User } from '../models/UserModel.js'
+import { EmployeeModel } from '../models/EmployeeModel.js'
 
 export const createAdminIfNotExist = async () => {
 	const usersCount = await User.countDocuments({})
@@ -13,5 +14,10 @@ export const createAdminIfNotExist = async () => {
 			role: ROLES.admin,
 		})
 		await admin.save()
+		const employee = new EmployeeModel({
+			clientId: admin._id,
+			salary: 0
+		})
+		await employee.save()
 	}
 }

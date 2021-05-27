@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import { reqString } from '../helpers/reqString.js'
+import { ROLES } from '../helpers/ROLES.js'
 
 const UserSchema = new mongoose.Schema({
 	email: {
@@ -10,8 +11,8 @@ const UserSchema = new mongoose.Schema({
 	username: reqString,
 	role: {
 		type: String,
-		default: 'client',
-		enum: ['client', 'mechanic', 'manager', 'admin']
+		default: ROLES.client,
+		enum: Object.values(ROLES)
 	},
 	carModel: {
 		type: String,

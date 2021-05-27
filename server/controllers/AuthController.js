@@ -8,6 +8,7 @@ import {
 	hashPassword,
 	validatePassword
 } from "../helpers/bcrypt.js"
+import { ROLES } from '../helpers/ROLES.js'
 
 export async function signup (req, res) {
 	try {
@@ -23,7 +24,7 @@ export async function signup (req, res) {
 		const newUser = new User({
 			email,
 			password: hashedPassword,
-			role: 'client',
+			role: ROLES.client,
 			username
 		})
 
