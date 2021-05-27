@@ -25,47 +25,39 @@ export async function getUsersList (req, res) {
 
 export async function updateUser (req, res) {
 	try {
-		const { _id, email, role, username, salary } = req.body
+		let { _id, email, role, username, salary } = req.body
 		if (!email && !role && !username) {
 			return res.status(404).json({
 				message: 'Nothing to update'
 			})
 		}
+		role = role.toLowerCase()
 		const user = await User.findById(_id)
 		if (!user) {
 			return res.status(404).json({
 				message: 'Cannot find user.'
 			})
 		}
-
-		if (user.role !== 'client' && role === 'client') {
+		if (user.role !== ROLES.client && role === ROLES.client) {
 			// remove from employees table if exist
-			const employee = await EmployeeModel.find({
+			const employee = await EmployeeModel.findOne({
 				clientId: user._id
 			})
 			await employee.delete()
-			await employee.save()
-		} else {
-			// add to employees table with role
-			const employee = new EmployeeModel({
-				clientId: user._id,
-				salary: salary || 0
-			})
+		} else if (user.role !== role) {
+			let employee = await EmployeeModel.findOne({ clientId: user._id })
+			if (!employee) {
+				employee = new EmployeeModel({
+					clientId: user._id,
+					salary: salary || 0
+				})
+			}
 			await employee.save()
 		}
 
 		user.username = username
 		user.role = role
-		await User.findById(_id, (err, doc) => {
-			if (err) {
-				return res.status(404).json({
-					message: 'Cannot find user. ' + err.message
-				})
-			}
-			doc.username = username
-			doc.role = role.toLowerCase()
-			doc.save()
-		})
+		await user.save()
 		res.status(200).json({
 			message: 'updated'
 		})
@@ -102,6 +94,17 @@ export async function deleteUser (req, res) {
 	} catch (e) {
 		res.status(404).json({
 			message: 'Error while deleting user'
+		})
+	}
+}
+
+export async function getMechanicsList (req, res) {
+	try {
+		const mechanicsList = await User.find({ role: ROLES.mechanic }).select({ username: 1 })
+		res.status(200).json(mechanicsList)
+	} catch (e) {
+		res.status(200).json({
+			message: 'Error while getting mechanics list. ' + e.message
 		})
 	}
 }
