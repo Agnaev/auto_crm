@@ -18,6 +18,10 @@ class UsersService extends AxiosClient {
       email
     })
   }
+
+  getMechanicsList () {
+    return this.instance.get('/users/mechanics')
+  }
 }
 
 export default new UsersService(host)

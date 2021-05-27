@@ -15,6 +15,11 @@ const Actions = {
   async [ActionTypes.UPDATE_USER_INFO] ({ dispatch }, { _id, email, username, role }) {
     await UsersService.updateUserInfo({ _id, email, username, role })
     await dispatch(ActionTypes.GET_USERS_LIST)
+  },
+  async [ActionTypes.FETCH_MECHANICS_LIST] ({ commit }) {
+    const mechanics = await UsersService.getMechanicsList()
+    commit(MutationTypes.SET_MECHANICS_LIST, mechanics)
+    return mechanics
   }
 }
 

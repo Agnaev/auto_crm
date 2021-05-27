@@ -1,5 +1,6 @@
 const state = () => ({
-  usersList: []
+  usersList: [],
+  mechanicsList: []
 })
 
 export default state

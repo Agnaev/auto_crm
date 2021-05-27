@@ -16,10 +16,16 @@
       </el-steps>
     </div>
     <div class="select-master" v-if="activeStep === 0">
-      <el-select>
-        <el-option>
-          master
-        </el-option>
+      <el-select
+        v-model="selectedMaster"
+        placeholder="Выберите мастера"
+      >
+        <el-option
+          v-for="master in mechanicsList"
+          :key="master._id"
+          :label="master.username"
+          :value="master._id"
+        ></el-option>
       </el-select>
     </div>
     <div class="select-date" v-else-if="activeStep === 1">
@@ -39,12 +45,17 @@
     <div class="entries-created" v-else>
       Вы успешно записались на обслуживание
     </div>
-    <el-button @click="nextStep"></el-button>
+    <div class="buttons-container">
+      <el-button @click="prevStep">Предыдуший шаг</el-button>
+      <el-button @click="nextStep" type="success">Следующий шаг</el-button>
+    </div>
   </el-dialog>
 </template>
 
 <script>
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted } from 'vue'
+import { useStore } from 'vuex'
+import ActionTypes from '@/store/users/action-types'
 
 export default {
   name: 'MakeAnAppointmentDialog',
@@ -55,10 +66,13 @@ export default {
     }
   },
   setup (props, { emit }) {
+    const store = useStore()
     const popupVisible = computed({
       get: () => props.visible,
       set: () => emit('close')
     })
+    const mechanicsList = computed(() => store.getters.getMechanicsList)
+    const selectedMaster = ref(mechanicsList.value?.[0])
     const activeStep = ref(0)
 
     function nextStep () {
@@ -68,6 +82,13 @@ export default {
       } else {
         activeStep.value++
       }
+    }
+
+    function prevStep () {
+      if (activeStep.value === 0) {
+        return
+      }
+      activeStep.value -= 1
     }
 
     const minDate = new Date()
@@ -82,12 +103,21 @@ export default {
       })
     }
 
+    onMounted(() => {
+      store.dispatch(
+        ActionTypes.FETCH_MECHANICS_LIST
+      )
+    })
+
     return {
       popupVisible,
       activeStep,
       nextStep,
+      prevStep,
       formatDate,
       range,
+      mechanicsList,
+      selectedMaster,
       log: console.log
     }
   }
@@ -95,5 +125,8 @@ export default {
 </script>
 
 <style scoped>
-
+.buttons-container {
+  display: flex;
+  justify-content: space-between;
+}
 </style>
