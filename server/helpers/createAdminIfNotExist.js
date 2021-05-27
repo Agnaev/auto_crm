@@ -7,7 +7,7 @@ export const createAdminIfNotExist = async () => {
 	if (usersCount === 0) {
 		console.log('[Creating admin user...]')
 		const admin = new User({
-			email: 'Admin@mail.ru',
+			email: 'admin@mail.ru',
 			password: await hashPassword('admin'),
 			username: 'admin',
 			role: ROLES.admin,

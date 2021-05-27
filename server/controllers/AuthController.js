@@ -41,7 +41,7 @@ export async function login (req, res) {
 		let { email, password } = req.body
 		email = email.toLowerCase()
 		const user = await User.findOne({ email })
-		if (!user?.email) {
+		if (!user) {
 			return invalid()
 		}
 		const validPassword = await validatePassword(password, user.password)
