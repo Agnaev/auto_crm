@@ -20,6 +20,10 @@
       label="Цена"
       prop="price"
     ></el-table-column>
+    <el-table-column
+      label="Время в часах"
+      prop="timeInHours"
+    />
     <el-table-column>
       <template #default="scope">
         <el-button @click="editHandle(scope.row)">Изменить</el-button>

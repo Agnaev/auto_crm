@@ -17,8 +17,8 @@ export async function getServicesList (req, res) {
 
 export async function createService (req, res) {
 	try {
-		const { name, description, price } = req.body
-		if (!name || !description || !price) {
+		const { name, description, price, timeInHours } = req.body
+		if (!name || !description || !price || !timeInHours) {
 			return res.status(400).json({
 				message: 'Invalid data'
 			})
@@ -26,7 +26,8 @@ export async function createService (req, res) {
 		const service = new Service({
 			name,
 			description,
-			price
+			price,
+			timeInHours
 		})
 		await service.save()
 		res.sendStatus(201)
@@ -66,8 +67,8 @@ export async function deleteService (req, res) {
 
 export async function updateService (req, res) {
 	try {
-		const { _id, name, description, price } = req.body
-		if (!_id || !name || !description || !price) {
+		const { _id, name, description, price, timeInHours } = req.body
+		if (!_id || !name || !description || !price || !timeInHours) {
 			return res.status(400).json({
 				message: 'Nothing to update'
 			})
@@ -76,6 +77,7 @@ export async function updateService (req, res) {
 		service.name = name
 		service.description = description
 		service.price = price
+		service.timeInHours = timeInHours
 		await service.save()
 		res.status(200).json(service)
 	} catch (e) {

@@ -12,12 +12,23 @@ const Actions = {
     await ServicesService.deleteService({ _id })
     await dispatch(ActionTypes.FETCH_SERVICES_LIST)
   },
-  [ActionTypes.CREATE_SERVICE]: async ({ dispatch }, { name, description, price }) => {
-    await ServicesService.createService({ name, description, price })
+  [ActionTypes.CREATE_SERVICE]: async ({ dispatch }, { name, description, price, timeInHours }) => {
+    await ServicesService.createService({
+      name,
+      description,
+      price,
+      timeInHours
+    })
     await dispatch(ActionTypes.FETCH_SERVICES_LIST)
   },
-  [ActionTypes.UPDATE_SERVICE_INFO]: async ({ dispatch }, { _id, name, description, price }) => {
-    await ServicesService.updateService({ _id, name, description, price })
+  [ActionTypes.UPDATE_SERVICE_INFO]: async ({ dispatch }, { _id, name, description, price, timeInHours }) => {
+    await ServicesService.updateService({
+      _id,
+      name,
+      description,
+      price,
+      timeInHours
+    })
     await dispatch(ActionTypes.FETCH_SERVICES_LIST)
   }
 }

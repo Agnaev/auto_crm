@@ -26,6 +26,11 @@
           v-model="data.price"
         ></el-input>
       </el-form-item>
+      <el-form-item label="Время в часах">
+        <el-input
+          v-model="data.timeInHours"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button @click="cancel">Отменить</el-button>
         <el-button @click="save" type="success">Сохранить</el-button>
@@ -67,7 +72,8 @@ export default {
         : {
           name: '',
           description: '',
-          price: 0
+          price: 0,
+          timeInHours: 0
         }
     )
 

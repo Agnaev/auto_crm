@@ -6,12 +6,13 @@ class ServicesService extends AxiosClient {
     return this.instance.get('/services')
   }
 
-  updateService ({ _id, name, description, price }) {
+  updateService ({ _id, name, description, price, timeInHours }) {
     return this.instance.put('/services', {
       name,
       description,
       price,
-      _id
+      _id,
+      timeInHours
     })
   }
 
@@ -19,11 +20,12 @@ class ServicesService extends AxiosClient {
     return this.instance.delete('/services?_id=' + _id)
   }
 
-  createService ({ name, description, price }) {
+  createService ({ name, description, price, timeInHours }) {
     return this.instance.post('/services', {
       name,
       description,
-      price
+      price,
+      timeInHours
     })
   }
 }
