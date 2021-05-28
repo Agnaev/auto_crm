@@ -103,7 +103,7 @@ export async function getMechanicsList (req, res) {
 		const mechanicsList = await User.find({ role: ROLES.mechanic }).select({ username: 1 })
 		res.status(200).json(mechanicsList)
 	} catch (e) {
-		res.status(200).json({
+		res.status(500).json({
 			message: 'Error while getting mechanics list. ' + e.message
 		})
 	}
