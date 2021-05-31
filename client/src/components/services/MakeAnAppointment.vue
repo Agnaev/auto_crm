@@ -41,9 +41,16 @@
       </el-calendar>
     </div>
     <div class="select-time" v-else-if="activeStep === 2">
-      <el-time-select
+      <el-select
         v-model="select.time"
-      ></el-time-select>
+      >
+        <el-option
+          v-for="time in times"
+          :key="time"
+          :label="time"
+          :value="time"
+        ></el-option>
+      </el-select>
     </div>
     <div class="entries-created" v-else>
       <h1 class="service-success">Вы успешно записались на обслуживание</h1>
@@ -66,12 +73,17 @@ import {
 } from 'vue'
 import { useStore } from 'vuex'
 import ActionTypes from '@/store/users/action-types'
+import ServiceActionTypes from '@/store/register-for-service/action-types'
 
 export default {
   name: 'MakeAnAppointmentDialog',
   props: {
     visible: {
       type: Boolean,
+      required: true
+    },
+    service: {
+      type: Object,
       required: true
     }
   },
@@ -80,6 +92,12 @@ export default {
     const popupVisible = computed({
       get: () => props.visible,
       set: () => emit('close')
+    })
+    const calendar = computed(() => store.getters.getDaysList)
+    const times = computed(() => {
+      const date = select.date.toLocaleDateString('ru')
+      console.log('computed', date, calendar.value)
+      return calendar.value[date]
     })
     const mechanicsList = computed(() => store.getters.getMechanicsList)
     const select = reactive({
@@ -90,22 +108,41 @@ export default {
     const activeStep = ref(0)
     const nextButtonDisabled = computed(() =>
       (activeStep.value === 0 && !select.master) ||
-      (activeStep.value === 1 && !select.date) ||
+      ((activeStep.value === 1 && !select.date) || (select.date && !checkDate(select.date))) ||
       (activeStep.value === 2 && !select.time)
     )
 
     function nextStep () {
-      if (activeStep.value > 2) {
+      if (activeStep.value === 2) {
         activeStep.value = 0
-        // TODO send data to backend
-        console.log(select)
+        store.dispatch(
+          ServiceActionTypes.REGISTER_FOR_SERVICE,
+          {
+            mechanicId: select.master,
+            serviceId: props.service._id,
+            time: select.time,
+            date: select.date.toLocaleDateString('ru')
+          }
+        )
         select.date = null
         select.master = null
         select.time = null
-        emit('close')
-      } else {
-        activeStep.value++
+        return emit('close')
       }
+      if (activeStep.value === 0) {
+        store.dispatch(
+          ServiceActionTypes.GET_DAYS_LIST_BY_SERVICE,
+          {
+            mechanicId: select.master?._id ?? select.master,
+            serviceId: props.service._id
+          }
+        )
+      }
+      // else if (activeStep.value === 1) {
+      //   console.log('select time?', select.date.toLocaleDateString('ru'))
+      //   times.value = calendar[select.date.toLocaleDateString('ru')]
+      // }
+      activeStep.value++
     }
 
     watch(
@@ -130,7 +167,8 @@ export default {
     const range = [minDate, maxDate]
 
     function checkDate (date) {
-      return date.getDay() % 2 === 0 && date > new Date()
+      const d = date.toLocaleDateString('ru')
+      return d in calendar.value && calendar.value[d].length !== 0
     }
 
     function formatDate (date) {
@@ -160,6 +198,7 @@ export default {
       select,
       nextButtonDisabled,
       checkDate,
+      times,
       log: console.log
     }
   }

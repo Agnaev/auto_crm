@@ -23,19 +23,20 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const isAuth = store.getters.isUserAuth
   const { role } = store.getters.getUserData ?? {}
-  if (!isAuth && to.name === 'Login') {
-    return next()
-  } else if (isAuth && to.name === 'Login') {
-    return next({
-      name: from.name
-    })
-  } else if (isAuth && role !== 'admin' && to.name === 'Users') {
-    return next({
-      name: 'Home'
-    })
-  } else if (isAuth && to.name !== 'Login') {
-    return next()
+  switch (true) {
+    case isAuth && to.name !== 'Login':
+    case !isAuth && to.name === 'Login':
+      return next()
+    case isAuth && to.name === 'Login':
+      return next({
+        name: from.name
+      })
+    case isAuth && role !== 'admin' && to.name === 'Users':
+      return next({
+        name: 'Home'
+      })
   }
+
   next({
     name: 'Login',
     query: {

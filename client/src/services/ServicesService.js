@@ -28,6 +28,23 @@ class ServicesService extends AxiosClient {
       timeInHours
     })
   }
+
+  getMechanicSchedule ({ mechanicId, serviceId }) {
+    const params = new URLSearchParams([
+      ['mechanicId', mechanicId],
+      ['serviceId', serviceId]
+    ])
+    return this.instance.get('/register-service/month?' + params.toString())
+  }
+
+  registerForService ({ mechanicId, serviceId, time, date }) {
+    return this.instance.post('/register-service', {
+      mechanicId,
+      serviceId,
+      time,
+      date
+    })
+  }
 }
 
 export default new ServicesService(baseURL)

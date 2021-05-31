@@ -14,10 +14,9 @@ export const createAdminIfNotExist = async () => {
 			role: ROLES.admin,
 		})
 		await admin.save()
-		const employee = new EmployeeModel({
+		await new EmployeeModel({
 			clientId: admin._id,
 			salary: 0
-		})
-		await employee.save()
+		}).save()
 	}
 }

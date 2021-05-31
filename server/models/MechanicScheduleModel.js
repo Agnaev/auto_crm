@@ -24,6 +24,7 @@ const MechanicScheduleSchema = new mongoose.Schema({
 	},
 	date: {
 		type: String,
+		validate: /\d{2}.\d{2}.\d{4}/,
 		required: true
 	},
 	serviceRecords: [serviceRecordsSchema]

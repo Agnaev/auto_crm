@@ -1,4 +1,6 @@
 import { Service } from '../models/Services.js'
+import { User } from '../models/UserModel.js'
+import { MechanicScheduleModel } from '../models/MechanicScheduleModel.js'
 
 export async function getServicesList (req, res) {
 	try {
@@ -9,8 +11,7 @@ export async function getServicesList (req, res) {
 		res.status(200).json(response)
 	} catch (e) {
 		res.status(404).json({
-			message: 'Error while getting services list.',
-			error: e.message
+			message: 'Error while getting services list.' + e.message
 		})
 	}
 }
@@ -84,6 +85,48 @@ export async function updateService (req, res) {
 		res.status(400).json({
 			message: 'Error while updating service',
 			error: e.message
+		})
+	}
+}
+
+export async function getMechanicScheduleByService (req, res) {
+	try {
+		const { masterId, serviceId } = req.query
+		if (!masterId || !serviceId) {
+			return res.status(400).json({
+				message: 'Set master id and service id for getting master schedule.'
+			})
+		}
+		const master = await User.findById(masterId, {
+			password: 0,
+			__v: 0,
+			role: 0,
+			refreshToken: 0
+		})
+		if (!master) {
+			return res.status(400).json({
+				message: 'Master id is not a valid identifier.'
+			})
+		}
+		const service = await Service.findById(serviceId)
+		if (!service) {
+			return res.status(400).json({
+				message: 'Could not find service by passed service id.'
+			})
+		}
+		// i have a master and service
+		// todo calc master schedule
+		const masterSchedule = await MechanicScheduleModel.find({
+			mechanicId: master._id
+		})
+		res.status(200).json({
+			master,
+			service,
+			masterSchedule
+		})
+	} catch (e) {
+		res.status(500).json({
+			message: 'Error while getting mechanic schedule. ' + e.message
 		})
 	}
 }

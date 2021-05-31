@@ -13,6 +13,8 @@
     ></store-card>
     <make-an-appointment-dialog
       :visible="visible"
+      v-if="visible"
+      :service="popupData"
       @close="visible = false"
     ></make-an-appointment-dialog>
   </div>
@@ -36,15 +38,11 @@ export default {
     const data = computed(() => store.getters.getServicesList)
     const indexedShoppingCart = computed(() => store.getters.getIndexedShoppingCart)
     const visible = ref(false)
+    const popupData = ref(null)
 
     function addItemToCart (item) {
-      // store.dispatch(
-      //   ActionTypes.ADD_PRODUCT_TO_SHOPPING_CART, {
-      //     productId: item._id
-      //   }
-      // )
       visible.value = true
-      // TODO Сделать запись на обслуживание
+      popupData.value = item
     }
 
     onMounted(
@@ -57,7 +55,8 @@ export default {
       addItemToCart,
       data,
       indexedShoppingCart,
-      visible
+      visible,
+      popupData
     }
   }
 }

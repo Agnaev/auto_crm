@@ -5,6 +5,7 @@ import services from './services'
 import store from './store'
 import shoppingCart from './shopping-cart'
 import carModels from './car-models'
+import registerForService from './register-for-service'
 
 const debug = process.env.NODE_ENV !== 'production'
 const plugins = debug ? [createLogger({})] : []
@@ -18,6 +19,7 @@ export default window.store = createStore({
     services,
     store,
     shoppingCart,
-    carModels
+    carModels,
+    registerForService
   }
 })

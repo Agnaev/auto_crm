@@ -1,0 +1,6 @@
+const ActionTypes = {
+  GET_DAYS_LIST_BY_SERVICE: 'GET_DAYS_LIST_BY_SERVICE',
+  REGISTER_FOR_SERVICE: 'REGISTER_FOR_SERVICE'
+}
+
+export default ActionTypes
