@@ -39,13 +39,13 @@ export async function cancelRegistrationForService (req, res) {
 			return userNotFound(res)
 		}
 		mechanicSchedule.serviceRecords = mechanicSchedule.serviceRecords?.filter(
-			x => x.clientId !== user._id
+			x => x.clientId.toString() !== user._id.toString() && time === x.time
 		)
 		await mechanicSchedule.save()
 		res.sendStatus(200)
 	} catch (e) {
 		res.status(400).json({
-			message: 'Error while canceling registration.'
+			message: 'Error while canceling registration. ' + e.message
 		})
 	}
 }

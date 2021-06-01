@@ -73,7 +73,8 @@ import {
 } from 'vue'
 import { useStore } from 'vuex'
 import ActionTypes from '@/store/users/action-types'
-import ServiceActionTypes from '@/store/register-for-service/action-types'
+import RegisterForServiceActionTypes from '@/store/register-for-service/action-types'
+import ServiceActionTypes from '@/store/services/action-types'
 
 export default {
   name: 'MakeAnAppointmentDialog',
@@ -116,7 +117,7 @@ export default {
       if (activeStep.value === 2) {
         activeStep.value = 0
         store.dispatch(
-          ServiceActionTypes.REGISTER_FOR_SERVICE,
+          RegisterForServiceActionTypes.REGISTER_FOR_SERVICE,
           {
             mechanicId: select.master,
             serviceId: props.service._id,
@@ -124,6 +125,7 @@ export default {
             date: select.date.toLocaleDateString('ru')
           }
         )
+        store.dispatch(ServiceActionTypes.FETCH_MY_SERVICE_RECORDS)
         select.date = null
         select.master = null
         select.time = null
@@ -131,7 +133,7 @@ export default {
       }
       if (activeStep.value === 0) {
         store.dispatch(
-          ServiceActionTypes.GET_DAYS_LIST_BY_SERVICE,
+          RegisterForServiceActionTypes.GET_DAYS_LIST_BY_SERVICE,
           {
             mechanicId: select.master?._id ?? select.master,
             serviceId: props.service._id

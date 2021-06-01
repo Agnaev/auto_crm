@@ -1,3 +1,5 @@
+import mongoose from "mongoose"
+
 import { Service } from '../models/Services.js'
 import { User } from '../models/UserModel.js'
 import { MechanicScheduleModel } from '../models/MechanicScheduleModel.js'
@@ -127,6 +129,35 @@ export async function getMechanicScheduleByService (req, res) {
 	} catch (e) {
 		res.status(500).json({
 			message: 'Error while getting mechanic schedule. ' + e.message
+		})
+	}
+}
+
+export async function getUserServiceRecords (req, res) {
+	try {
+		const { userId } = req.user
+		const userServices = await MechanicScheduleModel.find({
+			"serviceRecords.clientId": mongoose.Types.ObjectId(userId)
+		})
+		const services = userServices
+			.map(x => {
+				return x.serviceRecords.map(service => ({
+					clientId: service.clientId,
+					service: service.serviceId,
+					mechanicId: x.mechanicId,
+					time: service.time,
+					date: x.date
+				}))
+			})
+			.flat()
+			.filter(x => x.clientId.toString() === userId)
+		for (const serviceRecord of services) {
+			serviceRecord.service = await Service.findById(serviceRecord.service, { __v: 0 })
+		}
+		res.status(200).json(services)
+	} catch (e) {
+		res.status(400).json({
+			message: 'Error while getting user service records. ' + e.message
 		})
 	}
 }

@@ -30,6 +30,11 @@ const Actions = {
       timeInHours
     })
     await dispatch(ActionTypes.FETCH_SERVICES_LIST)
+  },
+  [ActionTypes.FETCH_MY_SERVICE_RECORDS]: async ({ commit }) => {
+    const list = await ServicesService.getMyServices()
+    commit(MutationTypes.SET_MY_SERVICE_RECORDS_LIST, list)
+    return list
   }
 }
 

@@ -62,7 +62,8 @@ export async function login (req, res) {
 		res.status(200).json({
 			user: {
 				email: user.email,
-				role: user.role
+				role: user.role,
+				userId: user._id
 			},
 			accessToken,
 			refreshToken

@@ -8,6 +8,9 @@ const Mutations = {
   },
   [MutationTypes.INDEXING_SERVICES_LIST] (state) {
     state.indexedServicesList = indexer(state.servicesList)
+  },
+  [MutationTypes.SET_MY_SERVICE_RECORDS_LIST] (state, list) {
+    state.myServicesRecords = list
   }
 }
 

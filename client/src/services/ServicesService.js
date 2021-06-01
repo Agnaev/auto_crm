@@ -45,6 +45,18 @@ class ServicesService extends AxiosClient {
       date
     })
   }
+
+  getMyServices () {
+    return this.instance.get('/services/my-services')
+  }
+
+  cancelRegistration ({ mechanicId, date, time }) {
+    return this.instance.post('/register-service/cancel', {
+      mechanicId,
+      date,
+      time
+    })
+  }
 }
 
 export default new ServicesService(baseURL)
