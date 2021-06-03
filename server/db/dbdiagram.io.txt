@@ -1,9 +1,22 @@
+Table CarModels {
+  _id int
+  name string
+}
+
 Table Users {
   _id int [pk, increment]
   username string
   email string
   password string
   role string
+  carModel int [ref: - CarModels._id]
+  refreshToken string
+}
+
+Table Employee {
+  _id int
+  userId int [ref: - Users._id]
+  salary int
 }
 
 Table Services {
@@ -11,7 +24,7 @@ Table Services {
   name string
   description string
   price int
-  date date
+  timeInHours integer
 }
 
 Table Products {
@@ -21,14 +34,27 @@ Table Products {
   price int
 }
 
-Table UserServices {
+Table ClientProducts {
+  _id int
+  clientId int [ref: - Users._id]
+  productId int [ref: < Products._id]
+}
+Table ClientShoppingCart {
   _id int [pk, increment]
-  serviceId int [ref: - Services._id]
+  clientProductsId int [ref: - Products._id]
   userId int [ref: - Users._id]
 }
 
-Table UserOrders {
+Table ServiceRecord {
+  _id int
+  serviceId int [ref: - Services._id]
+  clientId int [ref: - Users._id]
+  time date
+}
+
+Table Schedule {
   _id int [pk, increment]
-  productId int [ref: - Products._id]
-  userId int [ref: - Users._id]
+  date date
+  mechanicId int [ref: - Users._id]
+  ServiceRecords int [ref: > ServiceRecord._id]
 }
