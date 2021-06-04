@@ -34,14 +34,18 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 async function main () {
-	await mongoose.connect(
-		process.env.MONGO_CONNECTION_STRING,
-		{
-			useUnifiedTopology: true,
-			useNewUrlParser: true,
-			useFindAndModify: false
-		}
-	)
+	try {
+		await mongoose.connect(
+			process.env.MONGO_CONNECTION_STRING,
+			{
+				useUnifiedTopology: true,
+				useNewUrlParser: true,
+				useFindAndModify: false
+			}
+		)
+	} catch (e) {
+		console.error('Не удается подключиться к базе данных mongoDB. ', e.message)
+	}
 
 	await createAdminIfNotExist()
 
