@@ -57,6 +57,10 @@ class ServicesService extends AxiosClient {
       time
     })
   }
+
+  getMasterSchedule () {
+    return this.instance.get('/services/mechanic')
+  }
 }
 
 export default new ServicesService(baseURL)

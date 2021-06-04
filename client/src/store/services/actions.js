@@ -35,6 +35,11 @@ const Actions = {
     const list = await ServicesService.getMyServices()
     commit(MutationTypes.SET_MY_SERVICE_RECORDS_LIST, list)
     return list
+  },
+  [ActionTypes.GET_MECHANIC_SCHEDULE]: async ({ commit }) => {
+    const schedule = await ServicesService.getMasterSchedule()
+    commit(MutationTypes.SET_MECHANIC_SCHEDULE, schedule)
+    return schedule
   }
 }
 

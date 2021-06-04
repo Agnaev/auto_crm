@@ -11,6 +11,9 @@ const Mutations = {
   },
   [MutationTypes.SET_MY_SERVICE_RECORDS_LIST] (state, list) {
     state.myServicesRecords = list
+  },
+  [MutationTypes.SET_MECHANIC_SCHEDULE] (state, schedule) {
+    state.mechanicSchedule = schedule
   }
 }
 

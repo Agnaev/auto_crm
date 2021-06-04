@@ -8,7 +8,8 @@
         <client-view />
       </el-tab-pane>
       <el-tab-pane label="Мои записи">
-        <user-services-grid />
+        <master-services-grid v-if="isMaster"/>
+        <user-services-grid v-else />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -19,6 +20,7 @@ import { computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import AdminView from '@/components/services/AdminView'
 import ClientView from '@/components/services/ClientView'
+import MasterServicesGrid from '@/components/services/MasterServicesGrid'
 import UserServicesGrid from '@/components/services/UserServicesGrid'
 import ActionTypes from '@/store/services/action-types'
 
@@ -27,12 +29,14 @@ export default {
   components: {
     AdminView,
     ClientView,
-    UserServicesGrid
+    UserServicesGrid,
+    MasterServicesGrid
   },
   setup () {
     const store = useStore()
     const role = computed(() => store.getters.getUserData?.role ?? '')
     const canEdit = computed(() => role.value === 'admin' || role.value === 'manager')
+    const isMaster = computed(() => role.value === 'mechanic')
 
     onMounted(() => {
       store.dispatch(
@@ -41,7 +45,8 @@ export default {
     })
 
     return {
-      canEdit
+      canEdit,
+      isMaster
     }
   }
 }

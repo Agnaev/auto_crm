@@ -3,6 +3,7 @@ import mongoose from "mongoose"
 import { Service } from '../models/Services.js'
 import { User } from '../models/UserModel.js'
 import { MechanicScheduleModel } from '../models/MechanicScheduleModel.js'
+import { ROLES } from '../helpers/ROLES.js'
 
 export async function getServicesList (req, res) {
 	try {
@@ -116,8 +117,6 @@ export async function getMechanicScheduleByService (req, res) {
 				message: 'Could not find service by passed service id.'
 			})
 		}
-		// i have a master and service
-		// todo calc master schedule
 		const masterSchedule = await MechanicScheduleModel.find({
 			mechanicId: master._id
 		})
@@ -160,4 +159,46 @@ export async function getUserServiceRecords (req, res) {
 			message: 'Error while getting user service records. ' + e.message
 		})
 	}
+}
+
+export async function getMechanicSchedule (req, res) {
+	try {
+		const { userId } = req.user
+		const user = await User.findById(userId)
+		if (!user || user?.role !== ROLES.mechanic) {
+			res.status(400).json({
+				message: ''
+			})
+		}
+		const userSchedule = await MechanicScheduleModel.find({
+			mechanicId: user._id
+		}, {
+			__v: 0
+		})
+		const result = []
+		const curDate = new Date()
+		for (const item of userSchedule) {
+			for (const record of item.serviceRecords) {
+				if (+toDate(item.date, record.time) < +curDate) {
+					continue
+				}
+				result.push({
+					date: item.date,
+					time: record.time,
+					service: await Service.findById(record.serviceId, { __v: 0 }),
+					user: await User.findById(record.clientId ).select({ username: 1, email: 1, _id: 1 })
+				})
+			}
+		}
+		res.status(200).json(result)
+	} catch (e) {
+		res.status(400).json({
+			message: 'Error while getting mechanic schedule. ' + e.message
+		})
+	}
+}
+
+function toDate (date, time) {
+	const [d, m, y] = date.split('.')
+	return new Date(`${d}-${m}-${y} ${time}`)
 }

@@ -37,7 +37,7 @@
           @confirm="cancelService(scope.row)"
         >
           <template #reference>
-            <el-button type="danger">Отказаться</el-button>
+            <el-button type="danger">Отменить запись</el-button>
           </template>
         </el-popconfirm>
       </template>
