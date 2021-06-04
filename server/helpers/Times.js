@@ -1,5 +1,5 @@
 export const start = '09:00'
-export const end = '21:00'
+export const end = '18:00'
 
 export function generateTimes (start = start, end = end) {
 	const result = []
