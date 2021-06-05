@@ -45,6 +45,7 @@ async function main () {
 		)
 	} catch (e) {
 		console.error('Не удается подключиться к базе данных mongoDB. ', e.message)
+		process.exit(1)
 	}
 
 	await createAdminIfNotExist()

@@ -38,6 +38,9 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-button type="success" @click="makeOrder" :disabled="isShoppingCartEmpty">
+      Заказать
+    </el-button>
   </div>
 </template>
 
@@ -45,6 +48,7 @@
 import { onMounted, computed } from 'vue'
 import { useStore } from 'vuex'
 import ActionTypes from '@/store/shopping-cart/action-types'
+import OrderActionTypes from '@/store/orders/action-types'
 
 export default {
   name: 'ClientShoppingCart',
@@ -56,6 +60,7 @@ export default {
     const productsList = computed(
       () => shoppingCart.value.products
     )
+    const isShoppingCartEmpty = computed(() => shoppingCart.value.length === 0)
 
     onMounted(
       () => {
@@ -81,10 +86,20 @@ export default {
       )
     }
 
+    function makeOrder () {
+      const shoppingCartId = shoppingCart.value._id
+      store.dispatch(
+        OrderActionTypes.CREATE_ORDER,
+        { shoppingCartId }
+      )
+    }
+
     return {
       productsList,
+      isShoppingCartEmpty,
       incProduct,
-      decrementProduct
+      decrementProduct,
+      makeOrder
     }
   }
 }

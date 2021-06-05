@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-const product = new mongoose.Schema({
+export const product = new mongoose.Schema({
 	productId: {
 		type: mongoose.Schema.Types.ObjectId,
 		required: true

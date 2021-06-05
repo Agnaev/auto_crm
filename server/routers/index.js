@@ -11,6 +11,7 @@ import StoreRouter from './StoreRouter.js'
 import ShoppingCartRouter from './ClientShoppingRouter.js'
 import RegisterForServiceRouter from './RegisterForServiceRouter.js'
 import CarModelRouter from './CarModelsRouter.js'
+import OrdersRouter from './OrdersRouter.js'
 
 const router = express.Router()
 router.use(bodyParser.json())
@@ -25,6 +26,7 @@ router.use('/store', StoreRouter)
 router.use('/shopping-cart', ShoppingCartRouter)
 router.use('/register-service', RegisterForServiceRouter)
 router.use('/car-models', CarModelRouter)
+router.use('/orders', OrdersRouter)
 router.use((req, res) => res.sendStatus(404))
 
 export default router
