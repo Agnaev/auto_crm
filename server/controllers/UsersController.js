@@ -25,7 +25,7 @@ export async function getUsersList (req, res) {
 
 export async function updateUser (req, res) {
 	try {
-		let { _id, email, role, username, salary } = req.body
+		let { _id, email, role, username } = req.body
 		if (!email && !role && !username) {
 			return res.status(404).json({
 				message: 'Nothing to update'
@@ -47,9 +47,17 @@ export async function updateUser (req, res) {
 		} else if (user.role !== role) {
 			let employee = await EmployeeModel.findOne({ clientId: user._id })
 			if (!employee) {
+				const { salary, address, phone } = req.body
+				if (!salary || !address || !phone) {
+					return res.status(400).json({
+						message: 'Employee info is missing.'
+					})
+				}
 				employee = new EmployeeModel({
 					clientId: user._id,
-					salary: salary || 0
+					salary,
+					address,
+					phone
 				})
 			}
 			await employee.save()

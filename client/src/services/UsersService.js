@@ -10,12 +10,15 @@ class UsersService extends AxiosClient {
     return this.instance.delete('/users?_id=' + _id)
   }
 
-  updateUserInfo ({ username, role, _id, email }) {
+  updateUserInfo ({ username, role, _id, email, salary, phone, address }) {
     return this.instance.put('/users', {
       _id,
       username,
       role,
-      email
+      email,
+      salary,
+      address,
+      phone
     })
   }
 

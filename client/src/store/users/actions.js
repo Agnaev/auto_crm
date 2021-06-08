@@ -12,8 +12,8 @@ const Actions = {
     await UsersService.removeUser(_id)
     await dispatch(ActionTypes.GET_USERS_LIST)
   },
-  async [ActionTypes.UPDATE_USER_INFO] ({ dispatch }, { _id, email, username, role }) {
-    await UsersService.updateUserInfo({ _id, email, username, role })
+  async [ActionTypes.UPDATE_USER_INFO] ({ dispatch }, { _id, email, username, role, salary, phone, address }) {
+    await UsersService.updateUserInfo({ _id, email, username, role, salary, phone, address })
     await dispatch(ActionTypes.GET_USERS_LIST)
   },
   async [ActionTypes.FETCH_MECHANICS_LIST] ({ commit }) {
