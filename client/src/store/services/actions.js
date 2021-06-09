@@ -40,6 +40,10 @@ const Actions = {
     const schedule = await ServicesService.getMasterSchedule()
     commit(MutationTypes.SET_MECHANIC_SCHEDULE, schedule)
     return schedule
+  },
+  [ActionTypes.CHANGE_SERVICE_STATE]: async ({ dispatch }, { state, serviceId, date, time, mechanicId }) => {
+    await ServicesService.changeServiceState({ state, serviceId, date, time, mechanicId })
+    await dispatch(ActionTypes.FETCH_SERVICES_LIST)
   }
 }
 

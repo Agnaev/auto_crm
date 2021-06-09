@@ -73,14 +73,14 @@ export async function login (req, res) {
 	}
 
 	function invalid () {
-		res.status(401).json({
+		res.status(400).json({
 			message: 'Адрес эл. почты или пароль введены неверно.'
 		})
 	}
 }
 
 export async function refresh (req, res) {
-	function invalid (status = 401) {
+	function invalid (status = 400) {
 		res.status(status).json({
 			message: 'refresh token is expired or invalid'
 		})
@@ -93,14 +93,14 @@ export async function refresh (req, res) {
 	try {
 		const decoded = await jwtRefreshVerify(refreshToken)
 		if (!decoded) {
-			return invalid(400)
+			return invalid()
 		}
 		const foundedUser = await User.findById(decoded.userId)
 		if (!foundedUser) {
-			return invalid(400)
+			return invalid()
 		}
 		if (foundedUser.refreshToken !== refreshToken) {
-			return invalid(400)
+			return invalid()
 		}
 		const accessToken = jwtSign({
 			userId: foundedUser._id,
@@ -113,7 +113,7 @@ export async function refresh (req, res) {
 			accessToken
 		})
 	} catch (e) {
-		invalid(400)
+		invalid()
 	}
 }
 

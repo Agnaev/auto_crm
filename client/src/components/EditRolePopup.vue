@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { useStore } from 'vuex'
 import ActionTypes from '@/store/users/action-types'
 
@@ -118,10 +118,6 @@ export default {
       address: props.userData.address,
       phone: props.userData.phone
     })
-    watch(
-      () => formData.role,
-      newVal => console.log(newVal)
-    )
 
     function Role (label, value) {
       this.label = label

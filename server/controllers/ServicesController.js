@@ -69,6 +69,58 @@ export async function deleteService (req, res) {
 	}
 }
 
+export async function updateServiceState (req, res) {
+	try {
+		const { date, time, mechanicId, serviceId, state } = req.body
+		const { userId } = req.user
+		if (!date || !time || !mechanicId || !serviceId) {
+			return invalid('Missing params.')
+		}
+		if (!userId) {
+			return invalid('Could not find user.', 401)
+		}
+		const user = await User.findById(userId)
+		if (!user) {
+			return invalid('User not found.', 401)
+		}
+		const mechanic = await User.findById(mechanicId)
+		if (!mechanic || mechanic.role !== ROLES.mechanic) {
+			return invalid('Mechanic not found.')
+		}
+		const service = await Service.findById(serviceId)
+		if (!service) {
+			return invalid('Could not find service.')
+		}
+		const mechanicSchedule = await MechanicScheduleModel.findOne({
+			mechanicId: mechanic._id,
+			date,
+			'serviceRecords.time': time,
+			'serviceRecords.serviceId': service._id,
+			'serviceRecords.clientId': user._id
+		})
+		if (!mechanicSchedule) {
+			return invalid('Item not found in mechanic schedule.')
+		}
+		const serviceRecord = mechanicSchedule.serviceRecords?.find(x => x.time === time)
+		if (!serviceRecord) {
+			return invalid('Item not found in mechanic schedule.')
+		}
+		serviceRecord.state = state
+		await mechanicSchedule.save()
+		res.sendStatus(200)
+	} catch (e) {
+		res.status(400).json({
+			message: 'Error while updating user service state. ' + e.message
+		})
+	}
+
+	function invalid (message, status = 400) {
+		res.status(status).json({
+			message
+		})
+	}
+}
+
 export async function updateService (req, res) {
 	try {
 		const { _id, name, description, price, timeInHours } = req.body
@@ -136,7 +188,7 @@ export async function getUserServiceRecords (req, res) {
 	try {
 		const { userId } = req.user
 		const userServices = await MechanicScheduleModel.find({
-			"serviceRecords.clientId": mongoose.Types.ObjectId(userId)
+			'serviceRecords.clientId': mongoose.Types.ObjectId(userId)
 		})
 		const services = userServices
 			.map(x => {
@@ -145,7 +197,8 @@ export async function getUserServiceRecords (req, res) {
 					service: service.serviceId,
 					mechanicId: x.mechanicId,
 					time: service.time,
-					date: x.date
+					date: x.date,
+					state: service.state
 				}))
 			})
 			.flat()
@@ -185,6 +238,7 @@ export async function getMechanicSchedule (req, res) {
 				result.push({
 					date: item.date,
 					time: record.time,
+					state: record.state,
 					service: await Service.findById(record.serviceId, { __v: 0 }),
 					user: await User.findById(record.clientId ).select({ username: 1, email: 1, _id: 1 })
 				})

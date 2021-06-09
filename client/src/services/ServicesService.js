@@ -61,6 +61,16 @@ class ServicesService extends AxiosClient {
   getMasterSchedule () {
     return this.instance.get('/services/mechanic')
   }
+
+  changeServiceState ({ state, serviceId, date, time, mechanicId }) {
+    return this.instance.post('/services/check-in', {
+      serviceId,
+      mechanicId,
+      date,
+      time,
+      state
+    })
+  }
 }
 
 export default new ServicesService(baseURL)

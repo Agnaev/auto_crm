@@ -17,6 +17,11 @@
         {{ scope.row.service.description }}
       </template>
     </el-table-column>
+    <el-table-column label="Состояние" prop="state">
+      <template #default="scope">
+        {{ getMessageByState(scope.row.state) }}
+      </template>
+    </el-table-column>
     <el-table-column label="Дата">
       <template #default="scope">
         {{ scope.row.date }}
@@ -34,6 +39,7 @@
 import { computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import ActionTypes from '@/store/services/action-types'
+import { getMessageByState } from '@/helpers/ServiceStates'
 
 export default {
   name: 'MasterServicesGrid',
@@ -47,7 +53,8 @@ export default {
     const schedule = computed(() => store.getters.getMechanicSchedule)
 
     return {
-      schedule
+      schedule,
+      getMessageByState
     }
   }
 }

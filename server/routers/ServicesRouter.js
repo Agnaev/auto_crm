@@ -6,7 +6,8 @@ import {
 	createService,
 	getMechanicScheduleByService,
 	getUserServiceRecords,
-	getMechanicSchedule
+	getMechanicSchedule,
+	updateServiceState
 } from '../controllers/ServicesController.js'
 import {
 	checkUserInRole,
@@ -20,6 +21,7 @@ const router = express.Router()
 router.get('/', getServicesList)
 router.use(useAuth)
 router.use(useRoles)
+router.post('/check-in', updateServiceState)
 router.get('/busy', getMechanicScheduleByService)
 router.get('/my-services', getUserServiceRecords)
 router.get(

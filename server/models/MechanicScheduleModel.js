@@ -2,6 +2,13 @@ import mongoose from 'mongoose'
 
 const { ObjectId } = mongoose.Schema.Types
 
+const serviceStates = {
+	created: 'created', // клиент записался на оказание услуги
+	in_service: 'in_service', // клиент в автосервисе
+	service_provided: 'service_provided', // услуга успешно оказана
+	service_canceled: 'service_canceled' // услуга не оказана
+}
+
 const serviceRecordsSchema = new mongoose.Schema({
 	clientId: {
 		type: ObjectId,
@@ -10,6 +17,12 @@ const serviceRecordsSchema = new mongoose.Schema({
 	time: {
 		type: String,
 		required: true
+	},
+	state: {
+		type: String,
+		required: false,
+		default: serviceStates.created,
+		enum: Object.keys(serviceStates)
 	},
 	serviceId: {
 		type: ObjectId,
