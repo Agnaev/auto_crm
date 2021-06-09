@@ -143,7 +143,7 @@ export default {
           validator: passwordsMatch
         }
       ],
-      carModel: requiredInput('Введите модель вашего автомобиля'),
+      // carModel: requiredInput('Введите модель вашего автомобиля'),
       username: requiredInput('Введите ваше Ф.И.О')
     }
 
