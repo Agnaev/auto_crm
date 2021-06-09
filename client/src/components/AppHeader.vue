@@ -27,7 +27,7 @@
       >
         Пользователи
       </el-menu-item>
-      <el-menu-item index="/orders" v-if="permissions.admin || permissions.manager || permissions.mechanic">
+      <el-menu-item index="/orders">
         Заказы
       </el-menu-item>
       <el-menu-item index="/shopping-cart">

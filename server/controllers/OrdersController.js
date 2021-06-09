@@ -28,15 +28,26 @@ export async function createOrder (req, res) {
 export async function getOrders (req, res) {
 	try {
 		const { userId } = req.user
-		if (!userId) {
-			return error(res, 'Could not find user.')
+		const orders = await OrderModel.find({ clientId: userId }, { __v: 0 })
+		const result = []
+
+		for (const order of orders) {
+			const item = {
+				...order.toJSON(),
+				products: []
+			}
+			for (const { productId, count } of order.products) {
+				const product = await Product.findById(productId, { __v: 0 })
+				item.products.push({
+					name: product.name,
+					description: product.description,
+					price: product.price,
+					count
+				})
+			}
+			result.push(item)
 		}
-		const user = await User.findById(userId)
-		if (!user) {
-			return error(res, 'User not found.')
-		}
-		const orders = await OrderModel.find({ clientId: user._id })
-		return res.status(200).json(orders)
+		res.status(200).json(result)
 	} catch (e) {
 		error(res, 'Error while getting orders list. ' + e.message)
 	}
