@@ -10,7 +10,8 @@ const routes = [
     new Route('/shopping-cart', 'ShoppingCart', () => import('@/views/ShoppingCart.vue')),
     new Route('/orders', 'OrdersPage', () => import('@/views/OrdersPage.vue')),
     new Route('/store', 'Store', () => import('@/views/Store.vue')),
-    new Route('/services', 'Service', () => import('@/views/Services.vue'))
+    new Route('/services', 'Service', () => import('@/views/Services.vue')),
+    new Route('/profile', 'UserProfile', () => import('@/views/UserProfile.vue'))
   ]),
   new Route('/login', 'Login', () => import('@/views/AuthPage.vue'))
 ]

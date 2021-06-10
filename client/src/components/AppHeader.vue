@@ -36,6 +36,9 @@
       <el-menu-item index="/services">
         Услуги
       </el-menu-item>
+      <el-menu-item index="/profile">
+        Профиль пользователя
+      </el-menu-item>
       <el-menu-item>
         <el-button @click="logout">
           Выход

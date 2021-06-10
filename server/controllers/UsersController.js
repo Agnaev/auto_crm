@@ -1,6 +1,7 @@
 import { User } from '../models/UserModel.js'
 import { EmployeeModel } from '../models/EmployeeModel.js'
 import { ROLES } from '../helpers/ROLES.js'
+import { hashPassword, validatePassword } from '../helpers/bcrypt.js'
 
 export async function getUsersList (req, res) {
 	try	{
@@ -76,6 +77,85 @@ export async function updateUser (req, res) {
 	}
 }
 
+export async function getCurrentUserData (req, res) {
+	try {
+		const { userId } = req.user
+		if (!userId) {
+			return res.status(400).json({
+				message: 'Could not find user.'
+			})
+		}
+		const user = await User.findById(userId, {
+			__v: 0,
+			password: 0,
+			refreshToken: 0
+		})
+		if (user.role !== ROLES.client) {
+			const employee = await EmployeeModel.findOne({
+				clientId: user._id
+			}, {
+				__v: 0
+			})
+			return res.status(200).json({
+				...user._doc,
+				...(employee?._doc || {})
+			})
+		}
+		const result = user._doc
+		if (result) {
+			result.clientId = result._id
+		}
+		return res.status(200).json(result)
+	} catch (e) {
+		return res.status(400).json({
+			message: 'Error while getting user data. ' + e.message
+		})
+	}
+}
+
+export async function updateUserData (req, res) {
+	try {
+		const { username, password, address, phone, clientId } = req.body
+		const { userId } = req.user
+		if (clientId !== userId) {
+			return res.status(400).json({
+				message: 'Something went wrong.'
+			})
+		}
+		if (!userId) {
+			return res.status(400).json({
+				message: 'Could not find user.'
+			})
+		}
+		const user = await User.findById(userId)
+		if (!user) {
+			return res.status(400).json({
+				message: 'User not found.'
+			})
+		}
+		username && (user.username = username)
+		if (password && password.length > 6) {
+			user.password = hashPassword(password)
+		}
+		if (user.role === ROLES.manager || user.role === ROLES.mechanic) {
+			const employee = await EmployeeModel.findOne({ clientId: user._id })
+			if (address) {
+				employee.address = address
+			}
+			if (phone) {
+				employee.phone = phone
+			}
+			await employee.save()
+		}
+		await user.save()
+		return res.sendStatus(200)
+	} catch (e) {
+		res.status(400).json({
+			message: 'Error while updating user info. ' + e.message
+		})
+	}
+}
+
 export async function deleteUser (req, res) {
 	try {
 		const _id = req.query._id
@@ -113,6 +193,37 @@ export async function getMechanicsList (req, res) {
 	} catch (e) {
 		res.status(500).json({
 			message: 'Error while getting mechanics list. ' + e.message
+		})
+	}
+}
+
+export async function changePassword (req, res) {
+	try {
+		const { oldPassword, password, clientId } = req.body
+		const { userId } = req.user
+		if (clientId !== userId) {
+			return res.status(400).json({
+				message: 'Could not change password.'
+			})
+		}
+		const user = await User.findById(userId)
+		if (!user) {
+			return res.status(400).json({
+				message: 'User not found.'
+			})
+		}
+		const isOldPasswordValid = await validatePassword(oldPassword, user.password)
+		if (!isOldPasswordValid) {
+			return res.status(400).json({
+				message: 'Old password is invalid.'
+			})
+		}
+		user.password = await hashPassword(password)
+		await user.save()
+		return res.sendStatus(200)
+	} catch (e) {
+		return res.status(400).json({
+			message: 'Error while changing password. ' + e.message
 		})
 	}
 }

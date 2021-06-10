@@ -25,6 +25,28 @@ class UsersService extends AxiosClient {
   getMechanicsList () {
     return this.instance.get('/users/mechanics')
   }
+
+  updateUserDate ({ clientId, username, password, address, phone }) {
+    return this.instance.put('/users/own', {
+      clientId,
+      username,
+      password,
+      address,
+      phone
+    })
+  }
+
+  getCurrentUserInfo () {
+    return this.instance.get('/users/own')
+  }
+
+  changePassword ({ oldPassword, password, clientId }) {
+    return this.instance.put('/users/password', {
+      oldPassword,
+      password,
+      clientId
+    })
+  }
 }
 
 export default new UsersService(host)

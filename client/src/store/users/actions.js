@@ -20,6 +20,17 @@ const Actions = {
     const mechanics = await UsersService.getMechanicsList()
     commit(MutationTypes.SET_MECHANICS_LIST, mechanics)
     return mechanics
+  },
+  async [ActionTypes.SAVE_USER_DATA] (_, { clientId, username, password, address, phone }) {
+    await UsersService.updateUserDate({ clientId, username, password, address, phone })
+  },
+  async [ActionTypes.GET_CURRENT_USER_INFO] ({ commit }) {
+    const userInfo = await UsersService.getCurrentUserInfo()
+    commit(MutationTypes.SET_CURRENT_USER_INFO, userInfo)
+    return userInfo
+  },
+  [ActionTypes.SAVE_NEW_USER_PASSWORD] (_, { oldPassword, password, clientId }) {
+    return UsersService.changePassword({ oldPassword, password, clientId })
   }
 }
 

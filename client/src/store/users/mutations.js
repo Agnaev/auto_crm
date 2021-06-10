@@ -6,6 +6,9 @@ const Mutations = {
   },
   [MutationTypes.SET_MECHANICS_LIST] (state, mechanics) {
     state.mechanicsList = mechanics
+  },
+  [MutationTypes.SET_CURRENT_USER_INFO] (state, userInfo) {
+    state.currentUserInfo = userInfo
   }
 }
 
