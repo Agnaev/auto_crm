@@ -105,6 +105,7 @@ export default {
   display: flex;
   align-items: center;
   z-index: 1;
+  background-color: white;
 
   &__logo {
     width: 320px;
