@@ -50,16 +50,16 @@ export default {
   setup () {
     const images = [
       {
-        src: 'https://sun9-57.userapi.com/impg/nOyPoZSUPCBHu9yuZ38K6rBDGFQSWedHV5NDLA/dA3w5oDfmwM.jpg?size=786x588&quality=96&sign=ad05bb31fcfb00c658d2a1d40091f448&type=album'
+        src: require('../assets/images/slider/1.jpg')
       },
       {
-        src: 'https://sun9-75.userapi.com/impg/c855232/v855232031/235f79/F5GqRpBnSDQ.jpg?size=1079x743&quality=96&sign=0c055547d232f6e59e58e409e3d96e85&type=album'
+        src: require('../assets/images/slider/2.jpg')
       },
       {
-        src: 'https://sun9-2.userapi.com/impf/U3d3_GoIUoUqKj3UkjESykUObGQ3UMF3iVV-KQ/vrXf96-VeY0.jpg?size=800x815&quality=96&sign=7abf6719112a49dcb748de19800d5293&type=album'
+        src: require('../assets/images/slider/3.jpg')
       },
       {
-        src: 'https://sun9-35.userapi.com/impg/c853624/v853624038/1e6de8/OnMnfPHw3BE.jpg?size=528x384&quality=96&sign=340b7da77180aebd811c63f2c9402745&type=album'
+        src: require('../assets/images/slider/4.jpg')
       }
     ]
 
