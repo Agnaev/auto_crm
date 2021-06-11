@@ -1,5 +1,5 @@
 <template>
-  <div class="app-header">
+  <div class="app-header" style="z-index: 3">
     <div class="app-header__logo">
       Diploma
     </div>
