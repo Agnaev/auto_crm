@@ -18,12 +18,14 @@ if (process.env.NODE_ENV === 'production') {
 		'client',
 		'dist'
 	)
-	router.use(
+	app.use(
 		express.static(
 			clientsFilesLocation
 		)
 	)
-	router.get('/', (req, res) => {
+
+	app.get('/', (req, res) => {
+		console.log('/ handler')
 		res.sendFile(
 			path.join(
 				clientsFilesLocation,

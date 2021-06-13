@@ -1,43 +1,52 @@
 <template>
-  <h1 class="header">Завершенные заказы</h1>
-  <div class="client-list">
-    <el-card
-      v-for="order in ordersList"
-      :key="order._id"
-    >
-      <template #header>
-        {{ order._id }}
-      </template>
-      <ul class="products">
-        <li
-          v-for="product in order.products"
-          :key="product._id"
-          class="products__item"
-        >
-          {{ product.count }} x {{ product.name }}
-        </li>
-      </ul>
-    </el-card>
-  </div>
+  <article>
+    <h1 class="header">{{ $props.header }}</h1>
+    <div class="client-list" v-if="$props.orders?.length">
+      <el-card
+        v-for="order in $props.orders"
+        :key="order._id"
+      >
+        <template #header>
+          {{ order._id }}
+        </template>
+        <ul class="products">
+          <li
+            v-for="product in order.products"
+            :key="product._id"
+            class="products__item"
+          >
+            {{ product.count }} x {{ product.name }}
+          </li>
+        </ul>
+        <el-divider />
+        Общая сумма {{ getOrderSum(order) }}
+      </el-card>
+    </div>
+    <el-empty v-else />
+  </article>
 </template>
 
 <script>
-import { computed, onMounted } from 'vue'
-import { useStore } from 'vuex'
-import ActionTypes from '@/store/orders/action-types'
-
 export default {
   name: 'UserOrdersGrid',
+  props: {
+    header: {
+      type: String,
+      required: false,
+      default: ''
+    },
+    orders: {
+      type: Array,
+      required: true
+    }
+  },
   setup () {
-    const store = useStore()
-    const ordersList = computed(() => store.getters.getOrdersList)
-
-    onMounted(() => {
-      store.dispatch(ActionTypes.GET_ORDERS_LIST)
-    })
+    function getOrderSum (order) {
+      return order.products.reduce((res, item) => res + item.count * item.price, 0)
+    }
 
     return {
-      ordersList
+      getOrderSum
     }
   }
 }

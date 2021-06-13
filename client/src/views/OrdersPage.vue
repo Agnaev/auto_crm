@@ -2,22 +2,22 @@
   <orders-admin-view
     v-if="role === 'admin' || role === 'manager' || role === 'mechanic'"
   ></orders-admin-view>
-  <user-orders-grid
+  <user-orders
     v-else
-  ></user-orders-grid>
+  ></user-orders>
 </template>
 
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import OrdersAdminView from '@/components/order/OrdersAdminView'
-import UserOrdersGrid from '@/components/order/UserOrdersGrid'
+import UserOrders from '@/components/order/UserOrders'
 
 export default {
   name: 'OrdersPage',
   components: {
     OrdersAdminView,
-    UserOrdersGrid
+    UserOrders
   },
   setup () {
     const store = useStore()
