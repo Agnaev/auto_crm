@@ -25,7 +25,6 @@ if (process.env.NODE_ENV === 'production') {
 	)
 
 	app.get('/', (req, res) => {
-		console.log('/ handler')
 		res.sendFile(
 			path.join(
 				clientsFilesLocation,

@@ -162,7 +162,6 @@ export default {
         if (ruleForm.password !== ruleForm.passwordRepeat) {
           return false
         }
-        console.log('sending data', ruleForm)
         store.dispatch(
           AuthActionTypes.SIGNUP,
           {

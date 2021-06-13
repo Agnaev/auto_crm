@@ -5,6 +5,12 @@
     >
       <template #default="scope">
         {{ scope.row.user.username }}
+        <span v-if="scope.row.user.carModel">({{ scope.row.user.carModel }})</span>
+      </template>
+    </el-table-column>
+    <el-table-column label="Состояние" prop="state">
+      <template #default="scope">
+        {{ getMessageByState(scope.row.state) }}
       </template>
     </el-table-column>
     <el-table-column label="Услуга">
@@ -15,11 +21,6 @@
     <el-table-column label="Описание услуги">
       <template #default="scope">
         {{ scope.row.service.description }}
-      </template>
-    </el-table-column>
-    <el-table-column label="Состояние" prop="state">
-      <template #default="scope">
-        {{ getMessageByState(scope.row.state) }}
       </template>
     </el-table-column>
     <el-table-column label="Дата">

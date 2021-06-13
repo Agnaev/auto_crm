@@ -97,7 +97,6 @@ export default {
     const calendar = computed(() => store.getters.getDaysList)
     const times = computed(() => {
       const date = select.date.toLocaleDateString('ru')
-      console.log('computed', date, calendar.value)
       return calendar.value[date]
     })
     const mechanicsList = computed(() => store.getters.getMechanicsList)
@@ -140,10 +139,6 @@ export default {
           }
         )
       }
-      // else if (activeStep.value === 1) {
-      //   console.log('select time?', select.date.toLocaleDateString('ru'))
-      //   times.value = calendar[select.date.toLocaleDateString('ru')]
-      // }
       activeStep.value++
     }
 
@@ -200,8 +195,7 @@ export default {
       select,
       nextButtonDisabled,
       checkDate,
-      times,
-      log: console.log
+      times
     }
   }
 }

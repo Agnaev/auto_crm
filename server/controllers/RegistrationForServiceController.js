@@ -81,7 +81,6 @@ export async function registerForService (req, res) {
 			return userNotFound(res)
 		}
 		const serviceIds = mechanicSchedule.serviceRecords.map(x => mongoose.Types.ObjectId(x.serviceId))
-		console.log('time', time, service.timeInHours, serviceIds)
 		const mechanicScheduleServices = await Service.find({
 			_id: {
 				$in: serviceIds
