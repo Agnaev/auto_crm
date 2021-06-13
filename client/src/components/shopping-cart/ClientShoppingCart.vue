@@ -20,7 +20,16 @@
         </template>
       </el-table-column>
       <el-table-column prop="description" label="Описание" />
-      <el-table-column prop="price" label="Цена" />
+      <el-table-column prop="price" label="Цена" >
+        <template #header>
+          <h3>
+            Цена
+            <span v-if="amount">
+            {{ amount }} ₽
+          </span>
+          </h3>
+        </template>
+      </el-table-column>
       <el-table-column>
         <template #default="scope">
           <div v-if="scope.row.type === 'product'">
@@ -94,12 +103,21 @@ export default {
       )
     }
 
+    const amount = computed(() => store
+      .getters
+      .getUserShoppingCart
+      ?.products
+      ?.reduce(
+        (sum, product) => sum + (product.price * product.count), 0)
+    )
+
     return {
       productsList,
       isShoppingCartEmpty,
       incProduct,
       decrementProduct,
-      makeOrder
+      makeOrder,
+      amount
     }
   }
 }
