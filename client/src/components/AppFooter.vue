@@ -7,7 +7,7 @@
           <el-link @click.prevent="goto('/')">Главная страница</el-link>
           <el-link @click.prevent="goto('/store')">Интернет-магазин</el-link>
           <el-link @click.prevent="goto('/users')" v-if="role === 'admin'">Пользователи</el-link>
-          <el-link @click.prevent="goto('/orders')">Заказы</el-link>
+          <el-link @click.prevent="goto('/orders')" v-if="role === 'admin' || role === 'manager'">Заказы</el-link>
           <el-link @click.prevent="goto('/shopping-cart')">Корзина</el-link>
           <el-link @click.prevent="goto('/services')">Услуги</el-link>
           <el-link @click.prevent="goto('/profile')">Профиль пользователя</el-link>

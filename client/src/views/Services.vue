@@ -7,9 +7,11 @@
       <el-tab-pane :label="canEdit ? 'Клиент' : 'Сервисы'">
         <client-view />
       </el-tab-pane>
-      <el-tab-pane label="Мои записи">
-        <master-services-grid v-if="isMaster"/>
-        <user-services-grid v-else />
+      <el-tab-pane label="Расписание" v-if="isMaster">
+        <master-services-grid />
+      </el-tab-pane>
+      <el-tab-pane label="Мои записи" v-else>
+        <user-services-grid />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -41,6 +43,9 @@ export default {
     onMounted(() => {
       store.dispatch(
         ActionTypes.FETCH_SERVICES_LIST
+      )
+      store.dispatch(
+        ActionTypes.GET_MECHANIC_SCHEDULE
       )
     })
 

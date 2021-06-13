@@ -32,7 +32,25 @@
         {{ scope.row.time }}
       </template>
     </el-table-column>
+    <el-table-column label="Действия">
+      <template #default="scope">
+        <template v-if="scope.row.state === 'created'">
+          <el-button type="success" @click="checkIn(scope.row, 'in_service')">Клиент прибыл</el-button>
+          <el-button type="danger" @click="checkIn(scope.row, 'service_canceled')">Клиент не явился</el-button>
+        </template>
+        <el-button
+          v-else-if="scope.row.state === 'in_service'"
+          @click="checkIn(scope.row, 'service_provided')"
+          type="success"
+        >
+          Завершить работу
+        </el-button>
+      </template>
+    </el-table-column>
   </el-table>
+  <el-button
+    @click="updateTable"
+  >Обновить данные таблицы</el-button>
 </template>
 
 <script>
@@ -50,11 +68,37 @@ export default {
       store.dispatch(ActionTypes.GET_MECHANIC_SCHEDULE)
     })
 
-    const schedule = computed(() => store.getters.getMechanicSchedule)
+    const schedule = computed(() => sortMasterSchedule(store.getters.getMechanicSchedule))
+
+    function sortMasterSchedule (schedule) {
+      return [...schedule].sort((a, b) => {
+        // TODO implement smart sort
+        return 0
+      })
+    }
+
+    function checkIn (data, state) {
+      store.dispatch(
+        ActionTypes.CHANGE_SERVICE_STATE, {
+          state,
+          mechanicId: data.mechanicId,
+          date: data.date,
+          time: data.time,
+          serviceId: data.service._id,
+          clientId: data.user._id
+        }
+      )
+    }
+
+    function updateTable () {
+      store.dispatch(ActionTypes.GET_MECHANIC_SCHEDULE)
+    }
 
     return {
       schedule,
-      getMessageByState
+      getMessageByState,
+      checkIn,
+      updateTable
     }
   }
 }

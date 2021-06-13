@@ -41,9 +41,9 @@ const Actions = {
     commit(MutationTypes.SET_MECHANIC_SCHEDULE, schedule)
     return schedule
   },
-  [ActionTypes.CHANGE_SERVICE_STATE]: async ({ dispatch }, { state, serviceId, date, time, mechanicId }) => {
-    await ServicesService.changeServiceState({ state, serviceId, date, time, mechanicId })
-    await dispatch(ActionTypes.FETCH_SERVICES_LIST)
+  [ActionTypes.CHANGE_SERVICE_STATE]: async ({ dispatch }, { clientId, state, serviceId, date, time }) => {
+    await ServicesService.changeServiceState({ clientId, state, serviceId, date, time })
+    await dispatch(ActionTypes.GET_MECHANIC_SCHEDULE)
   }
 }
 

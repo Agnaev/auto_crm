@@ -40,14 +40,10 @@
     </el-table-column>
     <el-table-column>
       <template #default="scope">
-        <el-button
-          type="success"
-          @click="checkIn(scope.row)"
-          :disabled="scope.row.state === 'in_service'"
-        >Отметиться</el-button>
         <el-popconfirm
           title="Вы уверены что хотите отказаться от услуги?"
           @confirm="cancelService(scope.row)"
+          v-if="scope.row.state === 'created'"
         >
           <template #reference>
             <el-button type="danger">Отменить запись</el-button>
@@ -91,24 +87,10 @@ export default {
       store.dispatch(ActionTypes.FETCH_MY_SERVICE_RECORDS)
     }
 
-    function checkIn (data) {
-      console.log('check in', data.mechanicId, data.date, data.time, data.service._id)
-      store.dispatch(
-        ActionTypes.CHANGE_SERVICE_STATE, {
-          state: 'in_service',
-          mechanicId: data.mechanicId,
-          date: data.date,
-          time: data.time,
-          serviceId: data.service._id
-        }
-      )
-    }
-
     return {
       myServiceRecords,
       cancelService,
       reload,
-      checkIn,
       getMessageByState
     }
   }

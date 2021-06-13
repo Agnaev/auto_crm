@@ -21,7 +21,7 @@ const router = express.Router()
 router.get('/', getServicesList)
 router.use(useAuth)
 router.use(useRoles)
-router.post('/check-in', updateServiceState)
+
 router.get('/busy', getMechanicScheduleByService)
 router.get('/my-services', getUserServiceRecords)
 router.get(
@@ -29,6 +29,7 @@ router.get(
 	checkUserInRole(ROLES.mechanic),
 	getMechanicSchedule
 )
+router.post('/check-in', updateServiceState)
 router.use(checkUserInRole(ROLES.manager))
 router.post('/', createService)
 router.put('/', updateService)

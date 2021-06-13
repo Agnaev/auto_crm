@@ -62,10 +62,10 @@ class ServicesService extends AxiosClient {
     return this.instance.get('/services/mechanic')
   }
 
-  changeServiceState ({ state, serviceId, date, time, mechanicId }) {
+  changeServiceState ({ clientId, state, serviceId, date, time }) {
     return this.instance.post('/services/check-in', {
+      clientId,
       serviceId,
-      mechanicId,
       date,
       time,
       state

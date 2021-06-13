@@ -71,19 +71,16 @@ export async function deleteService (req, res) {
 
 export async function updateServiceState (req, res) {
 	try {
-		const { date, time, mechanicId, serviceId, state } = req.body
+		const { date, time, serviceId, state, clientId } = req.body
 		const { userId } = req.user
-		if (!date || !time || !mechanicId || !serviceId) {
+		if (!date || !time || !serviceId || !clientId) {
 			return invalid('Missing params.')
 		}
-		if (!userId) {
-			return invalid('Could not find user.', 401)
-		}
-		const user = await User.findById(userId)
+		const user = await User.findById(clientId)
 		if (!user) {
-			return invalid('User not found.', 401)
+			return invalid('User not found.')
 		}
-		const mechanic = await User.findById(mechanicId)
+		const mechanic = await User.findById(userId)
 		if (!mechanic || mechanic.role !== ROLES.mechanic) {
 			return invalid('Mechanic not found.')
 		}
