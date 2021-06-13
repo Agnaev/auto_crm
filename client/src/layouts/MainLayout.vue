@@ -1,8 +1,10 @@
 <template>
   <div class="main-layout">
-    <app-header />
-    <router-view />
-    <app-footer />
+    <div class="main-layout__content">
+      <app-header />
+      <router-view />
+    </div>
+    <app-footer class="main-layout__footer"/>
   </div>
 </template>
 
@@ -19,6 +21,8 @@ export default {
 }
 </script>
 
-<style scoped>
-.main-layout {}
+<style scoped lang="scss">
+.main-layout {
+
+}
 </style>

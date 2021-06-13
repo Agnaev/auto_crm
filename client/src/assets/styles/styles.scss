@@ -4,6 +4,23 @@
   box-sizing: border-box;
 }
 
+html,
+body,
+.main-layout {
+  height: 100%;
+}
+
+.main-layout {
+  &__content {
+    min-height: 94%;
+    padding-bottom: 50px;
+  }
+  &__footer {
+    height: 80px;
+    margin-top: -80px;
+  }
+}
+
 .client-list {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;

@@ -50,6 +50,9 @@ export default {
 .footer {
   min-height: 75px;
   width: 100%;
+  span {
+    padding-bottom: 20px;
+  }
   position: relative;
   bottom: 0;
   z-index: 4;
