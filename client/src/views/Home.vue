@@ -41,12 +41,17 @@
       </el-collapse>
     </div>
   </div>
+  <home-map />
 </template>
 
 <script>
+import HomeMap from '@/components/home/HomeMap'
+
 export default {
   name: 'Home',
-  components: {},
+  components: {
+    HomeMap
+  },
   setup () {
     const images = [
       {
