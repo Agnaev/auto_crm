@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="schedule">
+  <el-table :data="schedule" border>
     <el-table-column
       label="Клиент"
     >

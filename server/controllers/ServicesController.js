@@ -236,8 +236,15 @@ export async function getMechanicSchedule (req, res) {
 					date: item.date,
 					time: record.time,
 					state: record.state,
-					service: await Service.findById(record.serviceId, { __v: 0 }),
-					user: await User.findById(record.clientId ).select({ username: 1, email: 1, _id: 1 })
+					service: await Service.findById(record.serviceId, {
+						__v: 0
+					}),
+					user: await User.findById(record.clientId ).select({
+						username: 1,
+						email: 1,
+						_id: 1,
+						carModel: 1
+					})
 				})
 			}
 		}
