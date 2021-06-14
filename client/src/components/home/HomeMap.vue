@@ -16,7 +16,7 @@ export default {
       const script = document.createElement('script')
       script.src = src
       document.head.appendChild(script)
-      onLoad && script.addEventListener('load', onLoad)
+      script.addEventListener('load', onLoad)
     },
     initializeYandexMap () {
       /* eslint-disable no-undef */

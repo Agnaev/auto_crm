@@ -1,7 +1,7 @@
 <template>
   <div class="app-header" style="z-index: 3">
     <div class="app-header__logo">
-      Diploma
+      TOYOTA
     </div>
     <el-menu
       :default-active="activeIndex"
@@ -112,6 +112,8 @@ export default {
     height: 50px;
     padding: 10px;
     border-right: 2px solid #555;
+    font-size: 20px;
+    font-weight: bold;
   }
   &__links {
     width: calc(100% - 320px);
