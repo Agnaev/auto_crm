@@ -7,7 +7,7 @@
       <el-tab-pane :label="canEdit ? 'Клиент' : 'Сервисы'">
         <client-view />
       </el-tab-pane>
-      <el-tab-pane label="Расписание" v-if="isMaster">
+      <el-tab-pane label="Расписание" v-if="isMaster || canEdit">
         <master-services-grid />
       </el-tab-pane>
       <el-tab-pane label="Мои записи" v-else>

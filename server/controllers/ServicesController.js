@@ -71,7 +71,7 @@ export async function deleteService (req, res) {
 
 export async function updateServiceState (req, res) {
 	try {
-		const { date, time, serviceId, state, clientId } = req.body
+		const { date, time, serviceId, state, clientId, masterId } = req.body
 		const { userId } = req.user
 		if (!date || !time || !serviceId || !clientId) {
 			return invalid('Missing params.')
@@ -80,8 +80,17 @@ export async function updateServiceState (req, res) {
 		if (!user) {
 			return invalid('User not found.')
 		}
-		const mechanic = await User.findById(userId)
-		if (!mechanic || mechanic.role !== ROLES.mechanic) {
+		if (masterId !== userId) {
+			const currentUser = await User.findById(userId)
+			if (!currentUser ||(![ROLES.manager, ROLES.admin].includes(currentUser.role))) {
+				return res.status(400).json({
+					message: 'Access denied.'
+				})
+			}
+		}
+		const mechanic = await User.findById(masterId)
+
+		if (!mechanic || !([ROLES.mechanic, ROLES.manager, ROLES.admin].includes(mechanic.role))) {
 			return invalid('Mechanic not found.')
 		}
 		const service = await Service.findById(serviceId)
@@ -214,11 +223,20 @@ export async function getUserServiceRecords (req, res) {
 export async function getMechanicSchedule (req, res) {
 	try {
 		const { userId } = req.user
-		const user = await User.findById(userId)
-		if (!user || user?.role !== ROLES.mechanic) {
+		const { masterId } = req.query
+		let user = await User.findById(userId)
+		if (!user) {
 			res.status(400).json({
-				message: ''
+				message: 'You are not a mechanic.'
 			})
+		}
+		if (user.role === ROLES.admin || user.role === 'manager') {
+			if (!masterId) {
+				return res.status(400).json({
+					message: 'Set master id.'
+				})
+			}
+			user = await User.findById(masterId)
 		}
 		const userSchedule = await MechanicScheduleModel.find({
 			mechanicId: user._id
@@ -252,6 +270,46 @@ export async function getMechanicSchedule (req, res) {
 	} catch (e) {
 		res.status(400).json({
 			message: 'Error while getting mechanic schedule. ' + e.message
+		})
+	}
+}
+
+export async function getScheduleByMechanic (req, res) {
+	try {
+		const { masterId } = req.query
+		const master = await User.findById(masterId)
+		const masterSchedule = await MechanicScheduleModel.find({
+			mechanicId: master._id
+		}, {
+			__v: 0
+		})
+		const result = []
+		const curDate = new Date()
+		for (const item of masterSchedule) {
+			for (const record of item.serviceRecords) {
+				if (+toDate(item.date, record.time) < +curDate) {
+					continue
+				}
+				result.push({
+					date: item.date,
+					time: record.time,
+					state: record.state,
+					service: await Service.findById(record.serviceId, {
+						__v: 0
+					}),
+					user: await User.findById(record.clientId ).select({
+						username: 1,
+						email: 1,
+						_id: 1,
+						carModel: 1
+					})
+				})
+			}
+		}
+		res.status(200).json(result)
+	} catch (e) {
+		return res.status(400).json({
+			message: 'Something went wrong when getting schedule by mechanic. ' + e.message
 		})
 	}
 }

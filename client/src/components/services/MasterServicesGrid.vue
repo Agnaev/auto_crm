@@ -1,4 +1,16 @@
 <template>
+  <el-select
+    v-if="isAdminOrManager"
+    v-model="master"
+    placeholder="Выберите мастера, расписание которого хотите посмотреть"
+  >
+    <el-option
+      v-for="item in mastersList"
+      :key="item._id"
+      :label="item.username"
+      :value="item._id"
+    ></el-option>
+  </el-select>
   <el-table :data="schedule" border>
     <el-table-column
       label="Клиент"
@@ -51,13 +63,15 @@
   </el-table>
   <el-button
     @click="updateTable"
+    :disabled="!master"
   >Обновить данные таблицы</el-button>
 </template>
 
 <script>
-import { computed, onMounted } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import ActionTypes from '@/store/services/action-types'
+import UsersActionTypes from '@/store/users/action-types'
 import { getMessageByState } from '@/helpers/ServiceStates'
 
 export default {
@@ -65,41 +79,83 @@ export default {
   setup () {
     const store = useStore()
 
-    onMounted(() => {
-      store.dispatch(ActionTypes.GET_MECHANIC_SCHEDULE)
+    const role = computed(() => store.getters.getUserData.role)
+    const isAdminOrManager = computed(() => ['admin', 'master'].includes(role.value))
+    const mastersList = computed(() => store.getters.getMechanicsList)
+    const master = ref(
+      store.getters.getUserData.role === 'mechanic'
+        ? store.getters.getUserData.userId
+        : ''
+    )
+    const loader = ref(false)
+
+    onMounted(async () => {
+      loader.value = true
+      if (isAdminOrManager.value) {
+        await store.dispatch(UsersActionTypes.FETCH_MECHANICS_LIST)
+      } else {
+        await store.dispatch(ActionTypes.GET_MECHANIC_SCHEDULE)
+      }
+      loader.value = false
     })
+
+    function getScheduleByMechanic (masterId) {
+      loader.value = true
+      store.dispatch(ActionTypes.GET_SCHEDULE_BY_MECHANIC, {
+        masterId
+      })
+        .then(() => {
+          loader.value = false
+        })
+    }
+
+    if (isAdminOrManager.value) {
+      watch(
+        () => master.value,
+        getScheduleByMechanic
+      )
+    }
 
     const schedule = computed(() => sortMasterSchedule(store.getters.getMechanicSchedule))
 
     function sortMasterSchedule (schedule) {
-      return [...schedule].sort((a, b) => {
-        // TODO implement smart sort
-        return 0
-      })
+      return schedule
     }
 
     function checkIn (data, state) {
+      loader.value = true
       store.dispatch(
         ActionTypes.CHANGE_SERVICE_STATE, {
           state,
-          mechanicId: data.mechanicId,
+          masterId: master.value,
           date: data.date,
           time: data.time,
           serviceId: data.service._id,
           clientId: data.user._id
         }
-      )
+      ).then(() => {
+        loader.value = false
+      })
     }
 
     function updateTable () {
-      store.dispatch(ActionTypes.GET_MECHANIC_SCHEDULE)
+      loader.value = true
+      store.dispatch(ActionTypes.GET_MECHANIC_SCHEDULE, { masterId: master.value })
+        .then(() => {
+          loader.value = false
+        })
     }
 
     return {
       schedule,
       getMessageByState,
       checkIn,
-      updateTable
+      updateTable,
+      mastersList,
+      role,
+      isAdminOrManager,
+      master,
+      loader
     }
   }
 }

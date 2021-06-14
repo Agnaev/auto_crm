@@ -58,13 +58,22 @@ class ServicesService extends AxiosClient {
     })
   }
 
-  getMasterSchedule () {
-    return this.instance.get('/services/mechanic')
+  getMasterSchedule (options) {
+    let url = '/services/mechanic'
+    if (options?.masterId) {
+      url += '?masterId=' + options.masterId
+    }
+    return this.instance.get(url)
   }
 
-  changeServiceState ({ clientId, state, serviceId, date, time }) {
+  getScheduleByMechanic (options) {
+    return this.instance.get('/services/mechanic-schedule?masterId=' + options?.masterId)
+  }
+
+  changeServiceState ({ clientId, state, serviceId, date, time, masterId }) {
     return this.instance.post('/services/check-in', {
       clientId,
+      masterId,
       serviceId,
       date,
       time,

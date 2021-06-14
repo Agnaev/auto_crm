@@ -7,7 +7,8 @@ import {
 	getMechanicScheduleByService,
 	getUserServiceRecords,
 	getMechanicSchedule,
-	updateServiceState
+	updateServiceState,
+	getScheduleByMechanic
 } from '../controllers/ServicesController.js'
 import {
 	checkUserInRole,
@@ -31,6 +32,7 @@ router.get(
 )
 router.post('/check-in', updateServiceState)
 router.use(checkUserInRole(ROLES.manager))
+router.get('/mechanic-schedule', getScheduleByMechanic)
 router.post('/', createService)
 router.put('/', updateService)
 router.delete('/', deleteService)

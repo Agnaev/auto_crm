@@ -36,14 +36,19 @@ const Actions = {
     commit(MutationTypes.SET_MY_SERVICE_RECORDS_LIST, list)
     return list
   },
-  [ActionTypes.GET_MECHANIC_SCHEDULE]: async ({ commit }) => {
-    const schedule = await ServicesService.getMasterSchedule()
+  [ActionTypes.GET_MECHANIC_SCHEDULE]: async ({ commit }, options) => {
+    const schedule = await ServicesService.getMasterSchedule({ masterId: options?.masterId })
     commit(MutationTypes.SET_MECHANIC_SCHEDULE, schedule)
     return schedule
   },
-  [ActionTypes.CHANGE_SERVICE_STATE]: async ({ dispatch }, { clientId, state, serviceId, date, time }) => {
-    await ServicesService.changeServiceState({ clientId, state, serviceId, date, time })
-    await dispatch(ActionTypes.GET_MECHANIC_SCHEDULE)
+  [ActionTypes.GET_SCHEDULE_BY_MECHANIC]: async ({ commit }, options) => {
+    const schedule = await ServicesService.getScheduleByMechanic({ masterId: options?.masterId })
+    commit(MutationTypes.SET_MECHANIC_SCHEDULE, schedule)
+    return schedule
+  },
+  [ActionTypes.CHANGE_SERVICE_STATE]: async ({ dispatch }, { clientId, masterId, state, serviceId, date, time }) => {
+    await ServicesService.changeServiceState({ clientId, masterId, state, serviceId, date, time })
+    await dispatch(ActionTypes.GET_MECHANIC_SCHEDULE, { masterId })
   }
 }
 
