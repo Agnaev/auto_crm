@@ -5,6 +5,7 @@
       :key="item"
       :header="item.name"
       :description="item.description"
+      :price="item.price"
       :id="item._id"
       class="store-card"
       :in-shopping-cart="!!indexedShoppingCart?.[item._id]"
