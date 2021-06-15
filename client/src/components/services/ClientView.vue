@@ -5,6 +5,7 @@
       :key="item._id"
       :header="item.name"
       :description="item.description"
+      :price="item.price"
       :id="item._id"
       class="services-list__item"
       btnText="Записаться"

@@ -2,7 +2,7 @@
   <el-card :class="$props.class">
     <template #header>
       <div class="store-card__header">
-        <span>{{ $props.header }}</span>
+        <span>{{ $props.header }} {{ $props.price }} ₽</span>
       </div>
     </template>
     <div class="store-card__description">
@@ -33,6 +33,10 @@ export default {
     },
     id: {
       type: [String, Number],
+      required: true
+    },
+    price: {
+      type: [Number, String],
       required: true
     },
     class: {
