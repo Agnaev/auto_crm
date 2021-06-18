@@ -1,6 +1,6 @@
 <template>
   <div class="slider">
-    <el-carousel arrow="always" height="1000px">
+    <el-carousel arrow="always">
       <el-carousel-item
         v-for="image in images"
         :key="image"
