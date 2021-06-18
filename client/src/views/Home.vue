@@ -11,16 +11,41 @@
       </el-carousel-item>
     </el-carousel>
     <el-divider />
+    <div class="faq">
+      <h3>Почему вам стоит выбрать наш автосервис:</h3>
+      <el-collapse accordion>
+        <el-collapse-item name="1">
+          <template #title>
+            <h3>Наши механики - специалисты своего дела</h3>
+          </template>
+          <p>Мастера автосервиса TOYOTA оказывают профессиональные услуги по ремонту, диагностике и техническому обслуживанию автомобилей марки Toyota и Lexus. Вы обращаетесь к специалистам, которые учитывают функциональные особенности транспортных средств, характеристики, предлагают лучшие варианты решения проблем.</p>
+        </el-collapse-item>
+        <el-collapse-item name="2">
+          <template #title>
+            <h3>Наш сервис предоставляет вам возможность записаться на обслуживание свего автомобиля в онлайн-режиме!</h3>
+          </template>
+          <p>Для этого перейдите во вкладку услуги, выберите интересующую, после чего вам будет предожено выбрать мастера, день и время</p>
+        </el-collapse-item>
+        <el-collapse-item name="3">
+          <template #title>
+            <h3>Отложите нужный вам товар в онлайн-режиме</h3>
+          </template>
+          <p>Для этого перейдите во вкладку интернет-магазин, выберите нужный товар и добавьте его в корзину, из корзины вы можете осуществить отправить запрос на резерв, после чего наш менеджер отправит вам обратный ответ</p>
+        </el-collapse-item>
+      </el-collapse>
+    </div>
+    </div>
+    <el-divider />
     <el-card
       header="Контакты"
       class="contacts"
     >
-      <p>Телефон: Я никого не звал</p>
-      <p>Адрес: Идите нахрен</p>
+      <p>Телефон:29-33-66</p>
+      <p>Адрес: Иристонская 2А</p>
       <p>
         <el-link
           type="success"
-          href="https://instagram.com"
+          href="https://instagram.com/toyota_vld"
           target="__blank"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -29,37 +54,6 @@
         </el-link>
       </p>
     </el-card>
-    <el-divider />
-    <div class="faq">
-      <h3>Почему мы:</h3>
-      <el-collapse accordion>
-        <el-collapse-item name="1">
-          <template #title>
-            <h3>Весомая причина 1</h3>
-          </template>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias dolorem exercitationem quae quas quis quod reprehenderit suscipit, totam ut voluptatum. Autem blanditiis commodi consequatur et fugit quasi, quo repellat repellendus.</p>
-        </el-collapse-item>
-        <el-collapse-item name="2">
-          <template #title>
-            <h3>Весомая причина 2</h3>
-          </template>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam at aut cum, dicta dignissimos eaque hic impedit itaque laboriosam, magni, nisi nostrum quibusdam reiciendis rerum tempora! Aspernatur eos officiis sunt!</p>
-        </el-collapse-item>
-        <el-collapse-item name="3">
-          <template #title>
-            <h3>Весомая причина 3</h3>
-          </template>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam at aut cum, dicta dignissimos eaque hic impedit itaque laboriosam, magni, nisi nostrum quibusdam reiciendis rerum tempora! Aspernatur eos officiis sunt!</p>
-        </el-collapse-item>
-        <el-collapse-item name="4">
-          <template #title>
-            <h3>Весомая причина 4</h3>
-          </template>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam at aut cum, dicta dignissimos eaque hic impedit itaque laboriosam, magni, nisi nostrum quibusdam reiciendis rerum tempora! Aspernatur eos officiis sunt!</p>
-        </el-collapse-item>
-      </el-collapse>
-    </div>
-  </div>
   <home-map />
 </template>
 
